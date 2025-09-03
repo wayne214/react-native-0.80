@@ -6,6 +6,7 @@ import {
 } from '@react-navigation/native';
 import { FlashList } from "@shopify/flash-list";
 import axios from 'axios';
+import { LoadingManager } from '../../component/loading/LoadingManager';
 
 const NEWS_API = "https://api-hot.imsyy.top/toutiao"
 
@@ -33,11 +34,13 @@ const HotNewsList = () => {
   }, []);
 
   const getNewsData = () => {
+    LoadingManager.show("数据加载中...");
     axios.get(NEWS_API)
       .then(function (response) {
         // handle success
         console.log(response);
         if(response.data.code === 200) {
+          LoadingManager.hide();
           if(response.data.data.length > 0) {
             setNewsList(response.data.data);
           }
@@ -46,9 +49,11 @@ const HotNewsList = () => {
       .catch(function (error) {
         // handle error
         console.log(error);
+        LoadingManager.hide();
       })
       .finally(function () {
         // always executed
+        LoadingManager.hide();
       });
   }
 
