@@ -68,7 +68,7 @@ const HotNewsList = () => {
       <Pressable onPress={()=>gotoDetail(item.mobileUrl, item.title)}>
         <View style={styles.item}>
           <Image source={{uri: item.cover}} style={styles.cover}/>
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>{item.title}</Text>
         </View>
       </Pressable>
     )
@@ -119,9 +119,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
     marginBottom: 8,
+    marginLeft: 8,
+    flex:1,
   },
   description: {
     fontSize: 14,
