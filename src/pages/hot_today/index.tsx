@@ -38,7 +38,7 @@ const HotNewsList = () => {
   }, []);
 
   const getNewsData = () => {
-    LoadingManager.setRef(LoadingManager.show("数据加载中..."));
+    // LoadingManager.setRef(LoadingManager.show("数据加载中..."));
 
     axios.get(NEWS_API)
       .then(function (response) {
@@ -80,24 +80,21 @@ const HotNewsList = () => {
 
   return (
     <View style={{flex: 1}}>
-      <PullToRefresh
-        header={
-          <CustomPullToRefreshHeader
+      <FlatList
+        nestedScrollEnabled
+        refreshControl={
+          <RefreshControl
             refreshing={refreshing}
             onRefresh={() => {
               setRefreshing(true)
+              getNewsData()
             }}
           />
         }
-      >
-        <FlatList
-          style={{flex: 1}}
-          nestedScrollEnabled
-          data={newsList}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
-      </PullToRefresh>
+        data={newsList}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => item.id}
+      />
     </View>
 
 
