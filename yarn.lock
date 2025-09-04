@@ -1778,6 +1778,11 @@
   dependencies:
     nanoid "^3.3.11"
 
+"@sdcx/pull-to-refresh@^0.27.0":
+  version "0.27.0"
+  resolved "https://registry.npmmirror.com/@sdcx/pull-to-refresh/-/pull-to-refresh-0.27.0.tgz#e15afc26baa6a37c5d0b8d062334705a62d6b279"
+  integrity sha512-cHZhWz51cJAgJnhRSCme1H/LISdO1wi/DYd8kdNm53/puGkDYxnfroAcAj1crm2lxF1dOsJN8gngXsqsIA38nQ==
+
 "@shopify/flash-list@^2.0.2":
   version "2.0.2"
   resolved "https://registry.npmmirror.com/@shopify/flash-list/-/flash-list-2.0.2.tgz#644748f883fccf8cf2e0ca251e0ef88673b89120"
