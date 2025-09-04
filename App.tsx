@@ -12,8 +12,17 @@ import {
   Text,
   useColorScheme,
   View,
-  Platform
+  Platform, Switch, TouchableOpacity
 } from 'react-native';
+import {
+  Icon,
+  PaperProvider,
+  Snackbar,
+  Banner,
+  Button,
+  Modal,
+  Portal,
+} from 'react-native-paper';
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MyList from './src/pages/hot_today';
@@ -21,8 +30,9 @@ import NewsDetail from './src/pages/hot_today/news_detail.tsx';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import EveryDayNews from './src/pages/every_day_news';
 import _updateConfig from "./update.json";
-import { UpdateProvider, Pushy } from "react-native-update";
+import {UpdateProvider, Pushy, Cresc, useUpdate} from 'react-native-update';
 import {LoadingProvider} from "./src/component/loading/LoadingManager";
+import {useState} from "react";
 
 const { appKey } = _updateConfig[Platform.OS];
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -68,13 +78,129 @@ const RootStack = createNativeStackNavigator({
 const Navigation = createStaticNavigation(RootStack);
 
 function App() {
+  const {
+    client,
+    checkUpdate,
+    downloadUpdate,
+    switchVersionLater,
+    switchVersion,
+    updateInfo,
+    packageVersion,
+    currentHash,
+    parseTestQrCode,
+    progress: {received, total} = {},
+  } = useUpdate();
+
+  const [useDefaultAlert, setUseDefaultAlert] = useState(true);
+  const [showTestConsole, setShowTestConsole] = useState(false);
+  const [showUpdateBanner, setShowUpdateBanner] = useState(false);
+  const [showUpdateSnackbar, setShowUpdateSnackbar] = useState(false);
+  const snackbarVisible =
+      !useDefaultAlert && showUpdateSnackbar && updateInfo?.update;
+
+
   const isDarkMode = useColorScheme() === 'dark';
+
+  const updateView = () => {
+    return (
+        <View style={{padding: 20, flex: 1, flexDirection: 'column'}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text>
+              {useDefaultAlert ? '当前使用' : '当前不使用'}默认的alert更新提示
+            </Text>
+            <Switch
+                value={useDefaultAlert}
+                onValueChange={v => {
+                  setUseDefaultAlert(v);
+                  client?.setOptions({
+                    updateStrategy: v ? null : 'alwaysAlert',
+                  });
+                  setShowUpdateSnackbar(!v);
+                }}
+            />
+          </View>
+
+          <Text style={styles.instructions}>
+            这是版本一 {'\n'}
+            当前原生包版本号: {packageVersion}
+            {'\n'}
+            当前热更新版本Hash: {currentHash || '(空)'}
+            {'\n'}
+          </Text>
+          <Text>
+            下载进度：{received} / {total}
+          </Text>
+
+          <TouchableOpacity
+              onPress={() => {
+                checkUpdate();
+                setShowUpdateSnackbar(true);
+              }}>
+            <Text style={styles.instructions}>点击这里检查更新</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+              testID="testcase"
+              style={{marginTop: 15}}
+              onLongPress={() => {
+                setShowTestConsole(true);
+              }}>
+            <Text style={styles.instructions}>
+              react-native-update版本：{client?.version}
+            </Text>
+          </TouchableOpacity>
+
+          {snackbarVisible && (
+              <Snackbar
+                  visible={snackbarVisible}
+                  onDismiss={() => {
+                    setShowUpdateSnackbar(false);
+                  }}
+                  action={{
+                    label: '更新',
+                    onPress: async () => {
+                      setShowUpdateSnackbar(false);
+                      await downloadUpdate();
+                      setShowUpdateBanner(true);
+                    },
+                  }}>
+                <Text style={{color: 'white'}}>
+                  有新版本({updateInfo.name})可用，是否更新？
+                </Text>
+              </Snackbar>
+          )}
+
+          <Banner
+              style={{width: '100%', position: 'absolute', top: 0}}
+              visible={showUpdateBanner}
+              actions={[
+                {
+                  label: '立即重启',
+                  onPress: switchVersion,
+                },
+                {
+                  label: '下次再说',
+                  onPress: () => {
+                    switchVersionLater();
+                    setShowUpdateBanner(false);
+                  },
+                },
+              ]}
+              icon={({size}) => (
+                  <Icon name="checkcircleo" size={size} color="#00f" />
+              )}>
+            更新已完成，是否立即重启？
+          </Banner>
+        </View>
+    )
+  }
 
   return (
       <UpdateProvider client={pushyClient}>
         <View style={styles.container}>
           <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-          <Navigation/>
+          {/*<Navigation/>*/}
+          {updateView()}
           <LoadingProvider />
         </View>
       </UpdateProvider>
@@ -84,6 +210,11 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
   },
 });
 
