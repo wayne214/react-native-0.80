@@ -63,7 +63,11 @@ const HotNewsList = () => {
       });
   }
 
-  const renderItem = ({ item }: {item: NewsItem} ) => {
+  const gotoDetail = useCallback((url: string, title: string) => {
+    navigation.navigate("Details", {pageUrl: url, title: title})
+  }, [navigation])
+
+  const renderItem = useCallback(({ item }: {item: NewsItem} ) => {
     return (
       <Pressable onPress={()=>gotoDetail(item.mobileUrl, item.title)}>
         <View style={styles.item}>
@@ -72,11 +76,7 @@ const HotNewsList = () => {
         </View>
       </Pressable>
     )
-  }
-
-  const gotoDetail = (url: string, title: string) => {
-    navigation.navigate("Details", {pageUrl: url, title: title})
-  }
+  }, [gotoDetail])
 
   return (
     <View style={{flex: 1}}>
