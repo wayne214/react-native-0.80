@@ -199,8 +199,8 @@ function App() {
       <UpdateProvider client={pushyClient}>
         <View style={styles.container}>
           <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-          {/*<Navigation/>*/}
-          {updateView()}
+          <Navigation/>
+          {/*{updateView()}*/}
           <LoadingProvider />
         </View>
       </UpdateProvider>

@@ -78,8 +78,15 @@ const HotNewsList = () => {
     )
   }, [gotoDetail])
 
+  const gotoChartsPage = () => {
+    // navigation.navigate("ChartsPage")
+  }
+
   return (
     <View style={{flex: 1}}>
+      <Pressable onPress={gotoChartsPage}>
+        <Text>图表组件</Text>
+      </Pressable>
       <FlatList
         nestedScrollEnabled
         refreshControl={
