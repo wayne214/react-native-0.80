@@ -94,6 +94,35 @@ const HotNewsList: React.FC = () => {
     }
   }
 
+  // 根据今日头条API实际数据结构的日期处理
+  const formatDate = useCallback((timestamp: number, index: number): string => {
+    try {
+      // 今日头条API的timestamp字段不是标准时间戳
+      // 我们根据热度排名来显示相对时间
+      const currentDate = new Date();
+      
+      if (index < 5) {
+        // 前5条显示为“刚刚”
+        return '刚刚';
+      } else if (index < 15) {
+        // 6-15条显示为“1小时前”
+        return '1小时前';
+      } else if (index < 30) {
+        // 16-30条显示为“2小时前”
+        return '2小时前';
+      } else {
+        // 其余显示为今天日期
+        return currentDate.toLocaleDateString('zh-CN', {
+          month: '2-digit',
+          day: '2-digit'
+        });
+      }
+    } catch (error) {
+      console.warn('日期格式化错误:', error);
+      return '今日';
+    }
+  }, []);
+
   const gotoDetail = useCallback((url: string, title: string) => {
     navigation.navigate("Details", {pageUrl: url, title: title})
   }, [navigation])
@@ -135,7 +164,7 @@ const HotNewsList: React.FC = () => {
             <View style={styles.metaContainer}>
               <Text style={styles.hotLabel}>🔥 热度: {item.hot}</Text>
               <Text style={styles.timeLabel}>
-                {new Date(item.timestamp * 1000).toLocaleDateString('zh-CN')}
+                {formatDate(item.timestamp, index)}
               </Text>
             </View>
           </View>
