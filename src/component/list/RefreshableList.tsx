@@ -1,4 +1,4 @@
-import React, { useState, useCallback, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useCallback, forwardRef, useImperativeHandle, useMemo } from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -186,21 +186,26 @@ function RefreshableListComponent<T>(
     footerTextStyle
   ]);
 
-  // 渲染自定义刷新头部或默认刷新控件
-  const refreshControl = enableRefresh ? (
-    <RefreshControl
-      refreshing={refreshing}
-      onRefresh={handleRefresh}
-      colors={customRefreshHeader ? ['transparent'] : refreshColors}
-      tintColor={customRefreshHeader ? 'transparent' : refreshTintColor}
-    />
-  ) : undefined;
+  // 优化的刷新控件 - 使用 useMemo 减少重复渲染
+  const refreshControl = useMemo(() => {
+    if (!enableRefresh) return undefined;
+    
+    return (
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
+        colors={customRefreshHeader ? ['transparent'] : refreshColors}
+        tintColor={customRefreshHeader ? 'transparent' : refreshTintColor}
+        progressViewOffset={customRefreshHeader ? 50 : 0}
+      />
+    );
+  }, [enableRefresh, refreshing, handleRefresh, customRefreshHeader, refreshColors, refreshTintColor]);
 
-  // 渲染自定义刷新头部组件
-  const renderCustomHeader = () => {
+  // 优化的自定义刷新头部渲染 - 使用 useMemo 避免不必要的重新创建
+  const renderCustomHeader = useMemo(() => {
     if (!customRefreshHeader || !refreshing) return null;
     return React.createElement(customRefreshHeader, { refreshing });
-  };
+  }, [customRefreshHeader, refreshing]);
 
   // 暴露给父组件的方法
   useImperativeHandle(ref, () => ({
@@ -220,7 +225,7 @@ function RefreshableListComponent<T>(
 
   return (
     <View style={{ flex: 1 }}>
-      {renderCustomHeader()}
+      {renderCustomHeader}
       <FlatList
         ref={flatListRef}
         data={data}
@@ -230,6 +235,12 @@ function RefreshableListComponent<T>(
         onEndReachedThreshold={onEndReachedThreshold}
         ListFooterComponent={renderFooter}
         showsVerticalScrollIndicator={false}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={50}
+        initialNumToRender={10}
+        windowSize={10}
+        getItemLayout={undefined}
         {...flatListProps}
       />
     </View>

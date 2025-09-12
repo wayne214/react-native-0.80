@@ -9,8 +9,17 @@ import { LoadingManager } from '../../component/loading/LoadingManager';
 import { RefreshableList } from '../../component/list/RefreshableList';
 import { CustomRefreshHeader } from '../../component/list/CustomRefreshHeader';
 
-const NEWS_API = "https://api-hot.imsyy.top/toutiao"
+import { HOT_NEWS } from '../../api/api_contants';
 
+const NEWS_API = HOT_NEWS;
+
+
+// API 响应类型定义
+interface APIResponse<T> {
+  code: number;
+  data: T;
+  message?: string;
+}
 
 interface NewsItem {
   title: string;
@@ -27,19 +36,34 @@ type RootStackParamList = {
   Details: { pageUrl: string; title: string };
 };
 
-const HotNewsList = () => {
+// 组件 Props 类型
+interface RenderItemProps {
+  item: NewsItem;
+  index: number;
+}
+
+const HotNewsList: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [newsList, setNewsList] = useState<NewsItem[]>([])
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     getNewsData(1, true);
   }, []);
 
-  const getNewsData = async (page: number = 1, isRefresh: boolean = false) => {
+  const getNewsData = async (page: number = 1, isRefresh: boolean = false): Promise<void> => {
+    if (loading && !isRefresh) return; // 防止重复请求
+    
     try {
-      const response = await axios.get(`${NEWS_API}?page=${page}`);
+      setLoading(true);
+      setError(null);
+      
+      const response = await axios.get<APIResponse<NewsItem[]>>(`${NEWS_API}?page=${page}`, {
+        timeout: 10000, // 10秒超时
+      });
       
       if(response.data.code === 200) {
         const newData = response.data.data || [];
@@ -55,11 +79,17 @@ const HotNewsList = () => {
           setCurrentPage(page + 1);
           setHasMore(newData.length > 0);
         }
-        
-        LoadingManager.hide();
+      } else {
+        setError(response.data.message || '获取数据失败');
       }
     } catch (error) {
-      console.log(error);
+      console.error('获取新闻数据失败:', error);
+      const errorMessage = axios.isAxiosError(error) 
+        ? (error.code === 'ECONNABORTED' ? '请求超时，请检查网络连接' : '网络错误，请稍后重试')
+        : '未知错误发生';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
       LoadingManager.hide();
     }
   }
@@ -80,7 +110,7 @@ const HotNewsList = () => {
     }
   };
 
-  const renderItem = useCallback(({ item, index }: {item: NewsItem, index: number} ) => {
+  const renderItem = useCallback(({ item, index }: RenderItemProps) => {
     return (
       <Pressable 
         onPress={()=>gotoDetail(item.mobileUrl, item.title)}
@@ -94,6 +124,9 @@ const HotNewsList = () => {
             source={{uri: item.cover}} 
             style={styles.cover}
             resizeMode="cover"
+            // 内存优化
+            loadingIndicatorSource={{uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='}}
+            // defaultSource={{uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='}}
           />
           <View style={styles.contentContainer}>
             <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>
@@ -114,9 +147,35 @@ const HotNewsList = () => {
     )
   }, [gotoDetail])
 
+  // 重试加载
+  const retryLoad = useCallback(() => {
+    setError(null);
+    getNewsData(1, true);
+  }, []);
+
+  // 优化的 keyExtractor
+  const keyExtractor = useCallback((item: NewsItem, index: number): string => {
+    return `${item.id}-${index}`;
+  }, []);
+
   const gotoChartsPage = () => {
     // navigation.navigate("ChartsPage")
   }
+
+  // 渲染错误状态
+  const renderError = () => {
+    if (!error) return null;
+    
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorIcon}>⚠️</Text>
+        <Text style={styles.errorText}>{error}</Text>
+        <Pressable style={styles.retryButton} onPress={retryLoad}>
+          <Text style={styles.retryButtonText}>重试</Text>
+        </Pressable>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -125,10 +184,13 @@ const HotNewsList = () => {
         <Text style={styles.headerSubtitle}>实时热点资讯</Text>
       </View>
       
-      <RefreshableList
+      {error && newsList.length === 0 ? (
+        renderError()
+      ) : (
+        <RefreshableList
         data={newsList}
         renderItem={renderItem}
-        keyExtractor={(item, index) => item.id + index}
+        keyExtractor={keyExtractor}
         onRefresh={handleRefresh}
         onLoadMore={handleLoadMore}
         hasMore={hasMore}
@@ -142,6 +204,7 @@ const HotNewsList = () => {
         loadingText="正在加载..."
         contentContainerStyle={styles.listContent}
       />
+      )}
     </View>
   );
 };
@@ -247,6 +310,35 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: 'transparent',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    paddingVertical: 48,
+  },
+  errorIcon: {
+    fontSize: 48,
+    marginBottom: 16,
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 24,
+  },
+  retryButton: {
+    backgroundColor: '#ff6b6b',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 })
 

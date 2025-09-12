@@ -10,12 +10,12 @@ import {
 import { useCallback, useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-export function CustomPullToRefreshHeader(props: PullToRefreshHeaderProps) {
+export function CustomPullToRefreshHeader(props) {
   const { onRefresh, refreshing } = props
 
   const [text, setText] = useState('下拉刷新')
 
-  const onStateChanged = useCallback((event: PullToRefreshStateChangedEvent) => {
+  const onStateChanged = useCallback((event) => {
     const state = event.nativeEvent.state
     if (state === PullToRefreshStateIdle) {
       setText('下拉刷新')
@@ -26,7 +26,7 @@ export function CustomPullToRefreshHeader(props: PullToRefreshHeaderProps) {
     }
   }, [])
 
-  const onOffsetChanged = useCallback((event: PullToRefreshOffsetChangedEvent) => {
+  const onOffsetChanged = useCallback((event) => {
     console.log('refresh header offset', event.nativeEvent.offset)
   }, [])
 

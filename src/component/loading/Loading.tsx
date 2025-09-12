@@ -1,12 +1,19 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Modal, View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 
-const Loading = forwardRef((props, ref) => {
-    const [visible, setVisible] = useState(false);
-    const [message, setMessage] = useState('');
+export interface LoadingRef {
+    show: (msg?: string) => void;
+    hide: () => void;
+}
+
+interface LoadingProps {}
+
+const Loading = forwardRef<LoadingRef, LoadingProps>((props, ref) => {
+    const [visible, setVisible] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>('');
 
     useImperativeHandle(ref, () => ({
-        show(msg = '加载中...') {
+        show(msg: string = '加载中...') {
             setMessage(msg);
             setVisible(true);
         },
@@ -31,6 +38,8 @@ const Loading = forwardRef((props, ref) => {
         </Modal>
     );
 });
+
+Loading.displayName = 'Loading';
 
 const styles = StyleSheet.create({
     container: {
