@@ -34,7 +34,7 @@ import {UpdateProvider, Pushy, Cresc, useUpdate} from 'react-native-update';
 import {LoadingProvider} from "./src/component/loading/LoadingManager";
 import {useState} from "react";
 
-const { appKey } = _updateConfig[Platform.OS];
+const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
 const pushyClient = new Pushy({
   appKey,
