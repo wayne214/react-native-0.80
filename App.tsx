@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import { NewAppScreen } from '@react-native/new-app-screen';
 import {
   StatusBar,
@@ -33,6 +26,9 @@ import _updateConfig from "./update.json";
 import {UpdateProvider, Pushy, Cresc, useUpdate} from 'react-native-update';
 import {LoadingProvider} from "./src/component/loading/LoadingManager";
 import {useState} from "react";
+// 添加Redux相关导入
+import { Provider } from 'react-redux';
+import { store } from './src/store';
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -187,7 +183,7 @@ function App() {
                 },
               ]}
               icon={({size}) => (
-                  <Icon name="checkcircleo" size={size} color="#00f" />
+                  <Text style={{fontSize: size, color: '#00f'}}>✓</Text>
               )}>
             更新已完成，是否立即重启？
           </Banner>
@@ -196,14 +192,17 @@ function App() {
   }
 
   return (
-      <UpdateProvider client={pushyClient}>
-        <View style={styles.container}>
-          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-          <Navigation/>
-          {/*{updateView()}*/}
-          <LoadingProvider />
-        </View>
-      </UpdateProvider>
+      // 在UpdateProvider外层添加Redux Provider
+      <Provider store={store}>
+        <UpdateProvider client={pushyClient}>
+          <View style={styles.container}>
+            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+            <Navigation/>
+            {/*{updateView()}*/}
+            <LoadingProvider />
+          </View>
+        </UpdateProvider>
+      </Provider>
   );
 }
 

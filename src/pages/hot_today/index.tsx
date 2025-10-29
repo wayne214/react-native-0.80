@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, Pressable, Dimensions } from 'react-native';
 import {
   NavigationProp,
@@ -10,9 +10,20 @@ import { RefreshableList } from '../../component/list/RefreshableList';
 import { CustomRefreshHeader } from '../../component/list/CustomRefreshHeader';
 
 import { HOT_NEWS } from '../../api/api_contants';
+// 导入Redux相关
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import {
+  setNewsList,
+  appendNewsList,
+  setCurrentPage,
+  setHasMore,
+  setError,
+  clearNewsList,
+} from '../../store/newsSlice';
+import { showLoading, hideLoading } from '../../store/loadingSlice';
 
 const NEWS_API = HOT_NEWS;
-
 
 // API 响应类型定义
 interface APIResponse<T> {
@@ -45,51 +56,53 @@ interface RenderItemProps {
 const HotNewsList: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const [newsList, setNewsList] = useState<NewsItem[]>([])
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // 使用Redux状态替代本地useState
+  const dispatch = useDispatch();
+  const { newsList, currentPage, hasMore, error } = useSelector((state: RootState) => state.news);
+  const { isLoading } = useSelector((state: RootState) => state.loading);
+
   useEffect(() => {
     getNewsData(1, true);
   }, []);
 
   const getNewsData = async (page: number = 1, isRefresh: boolean = false): Promise<void> => {
-    if (loading && !isRefresh) return; // 防止重复请求
-    
+    if (isLoading && !isRefresh) return; // 防止重复请求
+
     try {
-      setLoading(true);
-      setError(null);
-      
+      dispatch(showLoading('加载中...'));
+      dispatch(setError(null));
+
       const response = await axios.get<APIResponse<NewsItem[]>>(`${NEWS_API}?page=${page}`, {
         timeout: 10000, // 10秒超时
       });
-      
+
+      console.log('获取新闻数据成功:', response.data)
+
       if(response.data.code === 200) {
         const newData = response.data.data || [];
-        
+
         if (isRefresh) {
           // 刷新时替换数据
-          setNewsList(newData);
-          setCurrentPage(2);
-          setHasMore(newData.length > 0);
+          dispatch(setNewsList(newData));
+          dispatch(setCurrentPage(2));
+          dispatch(setHasMore(newData.length > 0));
         } else {
           // 加载更多时追加数据
-          setNewsList(prevList => [...prevList, ...newData]);
-          setCurrentPage(page + 1);
-          setHasMore(newData.length > 0);
+          dispatch(appendNewsList(newData));
+          dispatch(setCurrentPage(page + 1));
+          dispatch(setHasMore(newData.length > 0));
         }
       } else {
-        setError(response.data.message || '获取数据失败');
+        dispatch(setError(response.data.message || '获取数据失败'));
       }
     } catch (error) {
       console.error('获取新闻数据失败:', error);
-      const errorMessage = axios.isAxiosError(error) 
+      const errorMessage = axios.isAxiosError(error)
         ? (error.code === 'ECONNABORTED' ? '请求超时，请检查网络连接' : '网络错误，请稍后重试')
         : '未知错误发生';
-      setError(errorMessage);
+      dispatch(setError(errorMessage));
     } finally {
-      setLoading(false);
+      dispatch(hideLoading());
       LoadingManager.hide();
     }
   }
@@ -100,15 +113,15 @@ const HotNewsList: React.FC = () => {
       // 今日头条API的timestamp字段不是标准时间戳
       // 我们根据热度排名来显示相对时间
       const currentDate = new Date();
-      
+
       if (index < 5) {
-        // 前5条显示为“刚刚”
+        // 前5条显示为"刚刚"
         return '刚刚';
       } else if (index < 15) {
-        // 6-15条显示为“1小时前”
+        // 6-15条显示为"1小时前"
         return '1小时前';
       } else if (index < 30) {
-        // 16-30条显示为“2小时前”
+        // 16-30条显示为"2小时前"
         return '2小时前';
       } else {
         // 其余显示为今天日期
@@ -141,7 +154,7 @@ const HotNewsList: React.FC = () => {
 
   const renderItem = useCallback(({ item, index }: RenderItemProps) => {
     return (
-      <Pressable 
+      <Pressable
         onPress={()=>gotoDetail(item.mobileUrl, item.title)}
         style={({ pressed }) => [
           styles.itemContainer,
@@ -149,8 +162,8 @@ const HotNewsList: React.FC = () => {
         ]}
       >
         <View style={styles.item}>
-          <Image 
-            source={{uri: item.cover}} 
+          <Image
+            source={{uri: item.cover}}
             style={styles.cover}
             resizeMode="cover"
             // 内存优化
@@ -178,7 +191,7 @@ const HotNewsList: React.FC = () => {
 
   // 重试加载
   const retryLoad = useCallback(() => {
-    setError(null);
+    dispatch(setError(null));
     getNewsData(1, true);
   }, []);
 
@@ -194,7 +207,7 @@ const HotNewsList: React.FC = () => {
   // 渲染错误状态
   const renderError = () => {
     if (!error) return null;
-    
+
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorIcon}>⚠️</Text>
@@ -212,7 +225,7 @@ const HotNewsList: React.FC = () => {
         <Text style={styles.headerTitle}>🔥 今日热闻</Text>
         <Text style={styles.headerSubtitle}>实时热点资讯</Text>
       </View>
-      
+
       {error && newsList.length === 0 ? (
         renderError()
       ) : (
