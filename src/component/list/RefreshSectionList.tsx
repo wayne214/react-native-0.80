@@ -29,7 +29,7 @@ interface Props<T> extends SectionListProps<T> {
     headerHeight?: number;
 }
 
-export function RefreshSectionList<T>({
+function RefreshSectionList<T>({
                                           refreshing,
                                           onRefresh,
                                           renderRefreshHeader,
@@ -40,6 +40,9 @@ export function RefreshSectionList<T>({
     const translateY = useRef(new Animated.Value(0)).current;
     const dragY = useRef(new Animated.Value(0)).current;
     const scrollRef = useRef(null);
+    const panRef = useRef<any>(null);
+    const isAtTop = useRef(true);
+    const [panEnabled, setPanEnabled] = useState(true);
 
     const refreshState = useRef<RefreshState>(RefreshState.Idle);
     const [, forceUpdate] = useState(0);
@@ -51,13 +54,20 @@ export function RefreshSectionList<T>({
         }
     };
 
-    // const translateY = useRef(new Animated.Value(0)).current;
-    // const dragY = useRef(new Animated.Value(0)).current;
+    const onScroll = (event: any) => {
+        const y = event.nativeEvent.contentOffset.y;
+        // 允许 1 像素以内的误差
+        const atTop = y <= 0.5; // 留一点余量
 
-    const progress = Animated.divide(
-        translateY,
-        new Animated.Value(refreshThreshold),
-    );
+        if (atTop !== isAtTop.current) {
+            isAtTop.current = atTop;
+            // 只有在顶部时，才允许 PanGestureHandler 拦截手势
+            setPanEnabled(atTop);
+        }
+
+        // 执行外部传入的 onScroll
+        sectionListProps.onScroll?.(event);
+    };
 
     const updatePullState = (offsetY: number) => {
         if (refreshState.current === RefreshState.Refreshing) return;
@@ -77,10 +87,14 @@ export function RefreshSectionList<T>({
         [{ nativeEvent: { translationY: dragY } }],
         { useNativeDriver: true,
             listener: (e: any) => {
-                const y = Math.max(0, e.nativeEvent.translationY);
-                translateY.setValue(Math.min(y, headerHeight * 1.5));
-
-                updatePullState(y);
+                const { translationY } = e.nativeEvent;
+                if(translationY > 0) {
+                    const y = Math.min(translationY, headerHeight * 1.5);
+                    translateY.setValue(Math.min(y, headerHeight * 1.5));
+                    updatePullState(y);
+                } else {
+                    translateY.setValue(0);
+                }
             }
         },
     );
@@ -97,19 +111,6 @@ export function RefreshSectionList<T>({
 
     /** refreshing 状态变化 */
     useEffect(() => {
-        // if (refreshing) {
-        //     Animated.timing(translateY, {
-        //         toValue: headerHeight,
-        //         duration: 500,
-        //         useNativeDriver: true,
-        //     }).start();
-        // } else {
-        //     Animated.timing(translateY, {
-        //         toValue: 0,
-        //         duration: 300,
-        //         useNativeDriver: true,
-        //     }).start();
-        // }
         if (
             !refreshing &&
             refreshState.current === RefreshState.Refreshing
@@ -137,20 +138,8 @@ export function RefreshSectionList<T>({
 
 
     const onHandlerStateChange = ({ nativeEvent }: any) => {
-        // if (nativeEvent.state === State.END) {
-        //     if (nativeEvent.translationY >= refreshThreshold && !refreshing) {
-        //         onRefresh();
-        //     } else if (!refreshing) {
-        //         Animated.spring(translateY, {
-        //             toValue: 0,
-        //             useNativeDriver: true,
-        //         }).start();
-        //     }
-        // }
-
         if (nativeEvent.state !== State.END) return;
-
-        if (refreshState.current === RefreshState.Ready) {
+        if (isAtTop.current && refreshState.current === RefreshState.Ready) {
             // 进入刷新
             setState(RefreshState.Refreshing);
 
@@ -201,7 +190,6 @@ export function RefreshSectionList<T>({
                     },
                 ]}
             >
-                {/*<Text style={styles.refreshText}>{refreshing ? '正在加载' : '下拉刷新'}</Text>*/}
                 <Text style={styles.refreshText}>{text}</Text>
             </Animated.View>
         )
@@ -214,9 +202,10 @@ export function RefreshSectionList<T>({
                 {renderRefreshHeaderView()}
 
                 <PanGestureHandler
+                    ref={panRef}
                     onGestureEvent={onGestureEvent}
                     onHandlerStateChange={onHandlerStateChange}
-                    enabled={!refreshing}
+                    enabled={panEnabled && !refreshing}
                     simultaneousHandlers={scrollRef}
                 >
                     <Animated.View
@@ -227,11 +216,14 @@ export function RefreshSectionList<T>({
                     >
                         <NativeViewGestureHandler
                             ref={scrollRef}
-                            simultaneousHandlers={scrollRef}
+                            simultaneousHandlers={panRef}
                         >
                             <SectionList
                                 {...sectionListProps}
+                                onScroll={onScroll}
+                                scrollEventThrottle={16}
                                 scrollEnabled={!refreshing}
+                                bounces={false}
                             />
                         </NativeViewGestureHandler>
 
@@ -261,3 +253,5 @@ const styles = StyleSheet.create({
         fontSize: 15
     }
 });
+
+export default RefreshSectionList;
