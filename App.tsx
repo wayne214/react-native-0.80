@@ -29,6 +29,7 @@ import {useState} from "react";
 // 添加Redux相关导入
 import { Provider } from 'react-redux';
 import { store } from './src/store';
+import Counter from './src/zud_store/Counter.tsx';
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -43,7 +44,7 @@ const pushyClient = new Pushy({
 const HomeTabs = createBottomTabNavigator({
   screens: {
     MyList: {
-      screen: MyList,
+      screen: Counter,
       options: {
         title: '今日热闻',
         tabBarIcon: () => <Text>🔥</Text>,
