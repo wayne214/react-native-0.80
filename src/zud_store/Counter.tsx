@@ -1,3 +1,4 @@
+import '../../global.css'
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { z } from 'zod';
 import { useCounterStore } from './useCounterStore.ts';
@@ -25,6 +26,12 @@ function Counter() {
 
   return (
     <View style={styles.container}>
+      <View className="w-300 h-200 items-center justify-center bg-red-500">
+        <Text className="text-xl font-bold text-blue-500">
+          Welcome to Nativewind!
+        </Text>
+      </View>
+
       <Text style={styles.text}>{count}</Text>
       <Pressable onPress={inc} style={styles.button}>
         <Text>加1</Text>
@@ -53,6 +60,8 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
+    width: 100,
+    height: 50
   },
 });
 
