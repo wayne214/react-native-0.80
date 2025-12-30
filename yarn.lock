@@ -6336,6 +6336,16 @@ react-native-is-edge-to-edge@1.2.1, react-native-is-edge-to-edge@^1.2.1:
   resolved "https://registry.npmmirror.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.2.1.tgz"
   integrity sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==
 
+react-native-nitro-device-info@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.npmmirror.com/react-native-nitro-device-info/-/react-native-nitro-device-info-1.4.2.tgz#a9748cd5c228a59ef0cc14e0c573975546ebdef1"
+  integrity sha512-DOsObZmxBxvLu8x7WdSD8JEllxVrrJR2CZbUdRSek+s8xP3Gc9ySw80DT6HD+0AquS8AsTpC8zHPMf298EkLrw==
+
+react-native-nitro-modules@^0.32.0:
+  version "0.32.0"
+  resolved "https://registry.npmmirror.com/react-native-nitro-modules/-/react-native-nitro-modules-0.32.0.tgz#383e888646e379cfe0b19358ba147420b5948950"
+  integrity sha512-nLDsmi/H9/cLcYxArYxcTDL641JiWnAH3u2LmsFETgyqSEHvukswDTdmX6AHBRIAwXu/iUDppZyjsaRpTG6WMg==
+
 react-native-paper@^5.14.5:
   version "5.14.5"
   resolved "https://registry.npmmirror.com/react-native-paper/-/react-native-paper-5.14.5.tgz"
