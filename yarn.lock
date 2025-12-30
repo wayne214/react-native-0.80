@@ -6317,6 +6317,11 @@ react-native-css-interop@0.2.1:
     lightningcss "~1.27.0"
     semver "^7.6.3"
 
+react-native-error-boundary@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npmmirror.com/react-native-error-boundary/-/react-native-error-boundary-3.1.0.tgz#9b3e13d4049c91a280c0825707395ebf370f6af7"
+  integrity sha512-yOz3uEwhYae6WIqZB3332MqL7He0Dck1KwBUkLhD9UfEvizwX7TGSKNXdQo2uMB22GdZEiFRpCxz14u2HBnSNg==
+
 react-native-gesture-handler@^2.30.0:
   version "2.30.0"
   resolved "https://registry.npmmirror.com/react-native-gesture-handler/-/react-native-gesture-handler-2.30.0.tgz#990c621fbeeefde853ececdcab7cbe1b621dbb8b"
