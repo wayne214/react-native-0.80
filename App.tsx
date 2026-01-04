@@ -30,6 +30,10 @@ import {useState} from "react";
 import { Provider } from 'react-redux';
 import { store } from './src/store';
 import Counter from './src/zud_store/Counter.tsx';
+// 添加TanStack Query相关导入
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './src/query/queryClient';
+import QueryExample from './src/query/queryExample.tsx';
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -44,7 +48,7 @@ const pushyClient = new Pushy({
 const HomeTabs = createBottomTabNavigator({
   screens: {
     MyList: {
-      screen: Counter,
+      screen: QueryExample,
       options: {
         title: '今日热闻',
         tabBarIcon: () => <Text>🔥</Text>,
@@ -193,17 +197,19 @@ function App() {
   }
 
   return (
-      // 在UpdateProvider外层添加Redux Provider
-      <Provider store={store}>
-        <UpdateProvider client={pushyClient}>
-          <View style={styles.container}>
-            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-            <Navigation/>
-            {/*{updateView()}*/}
-            <LoadingProvider />
-          </View>
-        </UpdateProvider>
-      </Provider>
+      // 在Redux Provider外层添加QueryClientProvider
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <UpdateProvider client={pushyClient}>
+            <View style={styles.container}>
+              <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+              <Navigation/>
+              {/*{updateView()}*/}
+              <LoadingProvider />
+            </View>
+          </UpdateProvider>
+        </Provider>
+      </QueryClientProvider>
   );
 }
 
