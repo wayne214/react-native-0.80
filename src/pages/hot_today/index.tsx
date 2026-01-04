@@ -5,11 +5,12 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import axios from 'axios';
+import { format } from 'date-fns';
 import { LoadingManager } from '../../component/loading/LoadingManager';
 import { RefreshableList } from '../../component/list/RefreshableList';
 import { CustomRefreshHeader } from '../../component/list/CustomRefreshHeader';
 
-import { HOT_NEWS } from '../../api/api_contants';
+import {apiKey, HOT_NEWS} from '../../api/api_contants';
 // 导入Redux相关
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -34,12 +35,12 @@ interface APIResponse<T> {
 
 interface NewsItem {
   title: string;
+  category: string;
   id: string;
-  cover: string;
-  timestamp: number;
-  hot: number;
+  thumbnail_pic_s: string;
+  date: string;
+  author_name: string;
   url: string;
-  mobileUrl: string;
 }
 
 // 定义 Details 页面接收的参数类型
@@ -72,29 +73,57 @@ const HotNewsList: React.FC = () => {
       dispatch(showLoading('加载中...'));
       dispatch(setError(null));
 
-      const response = await axios.get<APIResponse<NewsItem[]>>(`${NEWS_API}?page=${page}`, {
-        timeout: 10000, // 10秒超时
-      });
+      // 接口请求入参配置
+      const requestParams = {
+        key: apiKey,
+        type: '',
+        page: page,
+        page_size: 10,
+        is_filter: 1,
+      };
 
-      console.log('获取新闻数据成功:', response.data)
+      const response = await axios.get<APIResponse<NewsItem[]>>(`${NEWS_API}`, {params: requestParams});
 
-      if(response.data.code === 200) {
-        const newData = response.data.data || [];
+      console.log('获取新闻数据成功:', response)
 
-        if (isRefresh) {
-          // 刷新时替换数据
-          dispatch(setNewsList(newData));
-          dispatch(setCurrentPage(2));
-          dispatch(setHasMore(newData.length > 0));
-        } else {
-          // 加载更多时追加数据
-          dispatch(appendNewsList(newData));
-          dispatch(setCurrentPage(page + 1));
-          dispatch(setHasMore(newData.length > 0));
+      if(response.data.error_code === 0) {
+        if(response.data.result) {
+          const newData = response.data.result.data || [];
+
+          if (isRefresh) {
+            // 刷新时替换数据
+            dispatch(setNewsList(newData));
+            dispatch(setCurrentPage(2));
+            dispatch(setHasMore(newData.length > 0));
+          } else {
+            // 加载更多时追加数据
+            dispatch(appendNewsList(newData));
+            dispatch(setCurrentPage(page + 1));
+            dispatch(setHasMore(newData.length > 0));
+          }
         }
+
       } else {
         dispatch(setError(response.data.message || '获取数据失败'));
       }
+
+      // if(response.data.code === 200) {
+      //   const newData = response.data.data || [];
+      //
+      //   if (isRefresh) {
+      //     // 刷新时替换数据
+      //     dispatch(setNewsList(newData));
+      //     dispatch(setCurrentPage(2));
+      //     dispatch(setHasMore(newData.length > 0));
+      //   } else {
+      //     // 加载更多时追加数据
+      //     dispatch(appendNewsList(newData));
+      //     dispatch(setCurrentPage(page + 1));
+      //     dispatch(setHasMore(newData.length > 0));
+      //   }
+      // } else {
+      //   dispatch(setError(response.data.message || '获取数据失败'));
+      // }
     } catch (error) {
       console.error('获取新闻数据失败:', error);
       const errorMessage = axios.isAxiosError(error)
@@ -108,7 +137,7 @@ const HotNewsList: React.FC = () => {
   }
 
   // 根据今日头条API实际数据结构的日期处理
-  const formatDate = useCallback((timestamp: number, index: number): string => {
+  const formatDate = useCallback((timeDate: string, index: number): string => {
     try {
       // 今日头条API的timestamp字段不是标准时间戳
       // 我们根据热度排名来显示相对时间
@@ -125,10 +154,12 @@ const HotNewsList: React.FC = () => {
         return '2小时前';
       } else {
         // 其余显示为今天日期
-        return currentDate.toLocaleDateString('zh-CN', {
-          month: '2-digit',
-          day: '2-digit'
-        });
+        // return currentDate.toLocaleDateString('zh-CN', {
+        //   month: '2-digit',
+        //   day: '2-digit'
+        // });
+
+        return format(timeDate, 'yyyy-MM-dd HH:mm');
       }
     } catch (error) {
       console.warn('日期格式化错误:', error);
@@ -155,29 +186,36 @@ const HotNewsList: React.FC = () => {
   const renderItem = useCallback(({ item, index }: RenderItemProps) => {
     return (
       <Pressable
-        onPress={()=>gotoDetail(item.mobileUrl, item.title)}
+        onPress={()=>gotoDetail(item.url, item.title)}
         style={({ pressed }) => [
           styles.itemContainer,
           pressed && styles.itemPressed
         ]}
       >
         <View style={styles.item}>
-          <Image
-            source={{uri: item.cover}}
-            style={styles.cover}
-            resizeMode="cover"
-            // 内存优化
-            loadingIndicatorSource={{uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='}}
-            // defaultSource={{uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='}}
-          />
+          {
+            item.thumbnail_pic_s.length > 0 ? (
+                <Image
+                    source={{uri: item.thumbnail_pic_s}}
+                    style={styles.cover}
+                    resizeMode="cover"
+                    // 内存优化
+                    loadingIndicatorSource={{uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='}}
+                    // defaultSource={{uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='}}
+                />
+            ) : <View style={styles.newsDefaultCover}>
+              <Text style={styles.newsTitle}>新闻</Text>
+            </View>
+          }
+
           <View style={styles.contentContainer}>
             <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>
               {item.title}
             </Text>
             <View style={styles.metaContainer}>
-              <Text style={styles.hotLabel}>🔥 热度: {item.hot}</Text>
+              <Text style={styles.hotLabel}>来源: {item.author_name}</Text>
               <Text style={styles.timeLabel}>
-                {formatDate(item.timestamp, index)}
+                {formatDate(item.date, index)}
               </Text>
             </View>
           </View>
@@ -382,6 +420,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  newsTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  newsDefaultCover: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    backgroundColor: '#ff6b6b',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 })
 
 export default HotNewsList;

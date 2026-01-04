@@ -34,6 +34,7 @@ import Counter from './src/zud_store/Counter.tsx';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './src/query/queryClient';
 import QueryExample from './src/query/queryExample.tsx';
+import HotNewsList from "./src/pages/hot_today";
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -48,7 +49,7 @@ const pushyClient = new Pushy({
 const HomeTabs = createBottomTabNavigator({
   screens: {
     MyList: {
-      screen: QueryExample,
+      screen: HotNewsList,
       options: {
         title: '今日热闻',
         tabBarIcon: () => <Text>🔥</Text>,
