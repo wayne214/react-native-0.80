@@ -3,12 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // 定义新闻项的类型
 export interface NewsItem {
   title: string;
-  id: string;
-  cover: string;
-  timestamp: number;
-  hot: number;
+  category: string;
+  uniquekey: string;
+  thumbnail_pic_s: string;
+  date: string;
+  author_name: string;
   url: string;
-  mobileUrl: string;
 }
 
 // 定义news slice的state类型

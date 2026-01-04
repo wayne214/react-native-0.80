@@ -36,7 +36,7 @@ interface APIResponse<T> {
 interface NewsItem {
   title: string;
   category: string;
-  id: string;
+  uniquekey: string;
   thumbnail_pic_s: string;
   date: string;
   author_name: string;
@@ -235,7 +235,7 @@ const HotNewsList: React.FC = () => {
 
   // 优化的 keyExtractor
   const keyExtractor = useCallback((item: NewsItem, index: number): string => {
-    return `${item.id}-${index}`;
+    return `${item.uniquekey}-${index}`;
   }, []);
 
   const gotoChartsPage = () => {
