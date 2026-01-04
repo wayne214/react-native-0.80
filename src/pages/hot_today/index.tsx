@@ -27,10 +27,12 @@ import { showLoading, hideLoading } from '../../store/loadingSlice';
 const NEWS_API = HOT_NEWS;
 
 // API 响应类型定义
-interface APIResponse<T> {
-  code: number;
-  data: T;
-  message?: string;
+interface APIResponse {
+  error_code: number;
+  reason: string;
+  result: {
+    data: NewsItem[];
+  };
 }
 
 interface NewsItem {
@@ -82,7 +84,7 @@ const HotNewsList: React.FC = () => {
         is_filter: 1,
       };
 
-      const response = await axios.get<APIResponse<NewsItem[]>>(`${NEWS_API}`, {params: requestParams});
+      const response = await axios.get<APIResponse>(`${NEWS_API}`, {params: requestParams});
 
       console.log('获取新闻数据成功:', response)
 
@@ -104,7 +106,7 @@ const HotNewsList: React.FC = () => {
         }
 
       } else {
-        dispatch(setError(response.data.message || '获取数据失败'));
+        dispatch(setError(response.data.reason || '获取数据失败'));
       }
 
       // if(response.data.code === 200) {
