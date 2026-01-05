@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 import { WebView} from 'react-native-webview';
 import { RouteProp, useNavigation } from '@react-navigation/native';
+import { StyleSheet } from "react-native-unistyles"
 // 定义路由参数类型
 type NewsDetailRouteProp = RouteProp<{
   NewsDetail: {
