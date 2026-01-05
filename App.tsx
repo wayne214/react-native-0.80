@@ -35,6 +35,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './src/query/queryClient';
 import QueryExample from './src/query/queryExample.tsx';
 import HotNewsList from "./src/pages/hot_today";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -202,12 +203,15 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
           <UpdateProvider client={pushyClient}>
-            <View style={styles.container}>
-              <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-              <Navigation/>
-              {/*{updateView()}*/}
-              <LoadingProvider />
-            </View>
+            <SafeAreaProvider>
+              {/*<View style={styles.container}>*/}
+                <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+                <Navigation/>
+                {/*{updateView()}*/}
+                <LoadingProvider />
+              {/*</View>*/}
+            </SafeAreaProvider>
+
           </UpdateProvider>
         </Provider>
       </QueryClientProvider>
