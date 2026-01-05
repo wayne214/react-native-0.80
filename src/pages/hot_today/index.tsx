@@ -67,7 +67,10 @@ const HotNewsList: React.FC = () => {
   // 添加一个状态来跟踪当前是否正在进行请求
   const [isRequesting, setIsRequesting] = React.useState(false);
   const isRequestingRef = React.useRef(isRequesting);
-  
+
+  const num: number = Math.floor(Math.random() * 20) + 1;
+
+
   // 更新 ref 以保持与状态同步
   React.useEffect(() => {
     isRequestingRef.current = isRequesting;
@@ -76,11 +79,11 @@ const HotNewsList: React.FC = () => {
   const getNewsData = useCallback(async (page: number = 1, isRefresh: boolean = false): Promise<void> => {
     // 防止重复请求：检查全局loading状态和本地请求状态
     if ((isLoading || isRequestingRef.current) && !isRefresh) return;
-    
+
     // 设置本地请求状态以防止重复请求
     setIsRequesting(true);
     isRequestingRef.current = true;
-    
+
     try {
       dispatch(showLoading('加载中...'));
       dispatch(setError(null));
@@ -206,9 +209,7 @@ const HotNewsList: React.FC = () => {
                     loadingIndicatorSource={{uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='}}
                     // defaultSource={{uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='}}
                 />
-            ) : <View style={styles.newsDefaultCover}>
-              <Text style={styles.newsTitle}>新闻</Text>
-            </View>
+            ) : <Image source={{uri: `https://picsum.photos/400/200?random=${num}`}} style={styles.cover}/>
           }
 
           <View style={styles.contentContainer}>
