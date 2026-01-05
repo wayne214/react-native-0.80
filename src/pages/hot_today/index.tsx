@@ -64,11 +64,7 @@ const HotNewsList: React.FC = () => {
   const { newsList, currentPage, hasMore, error } = useSelector((state: RootState) => state.news);
   const { isLoading } = useSelector((state: RootState) => state.loading);
 
-  useEffect(() => {
-    getNewsData(1, true);
-  }, []);
-
-  const getNewsData = async (page: number = 1, isRefresh: boolean = false): Promise<void> => {
+  const getNewsData = useCallback(async (page: number = 1, isRefresh: boolean = false): Promise<void> => {
     if (isLoading && !isRefresh) return; // 防止重复请求
 
     try {
@@ -108,24 +104,6 @@ const HotNewsList: React.FC = () => {
       } else {
         dispatch(setError(response.data.reason || '获取数据失败'));
       }
-
-      // if(response.data.code === 200) {
-      //   const newData = response.data.data || [];
-      //
-      //   if (isRefresh) {
-      //     // 刷新时替换数据
-      //     dispatch(setNewsList(newData));
-      //     dispatch(setCurrentPage(2));
-      //     dispatch(setHasMore(newData.length > 0));
-      //   } else {
-      //     // 加载更多时追加数据
-      //     dispatch(appendNewsList(newData));
-      //     dispatch(setCurrentPage(page + 1));
-      //     dispatch(setHasMore(newData.length > 0));
-      //   }
-      // } else {
-      //   dispatch(setError(response.data.message || '获取数据失败'));
-      // }
     } catch (error) {
       console.error('获取新闻数据失败:', error);
       const errorMessage = axios.isAxiosError(error)
@@ -136,7 +114,12 @@ const HotNewsList: React.FC = () => {
       dispatch(hideLoading());
       LoadingManager.hide();
     }
-  }
+  }, [dispatch, isLoading])
+
+  useEffect(() => {
+    getNewsData(1, true).then();
+  }, []);
+
 
   // 根据今日头条API实际数据结构的日期处理
   const formatDate = useCallback((timeDate: string, index: number): string => {

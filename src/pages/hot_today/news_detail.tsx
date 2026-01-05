@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 import { WebView} from 'react-native-webview';
 import { RouteProp, useNavigation } from '@react-navigation/native';
-import { StyleSheet } from "react-native-unistyles"
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles"
 // 定义路由参数类型
 type NewsDetailRouteProp = RouteProp<{
   NewsDetail: {
@@ -18,6 +18,12 @@ function NewsDetail ({ route }: { route: NewsDetailRouteProp }){
   const { pageUrl, title } = route.params;
 
   useEffect(() => {
+    // 获取当前主题名
+    console.log("theme_name_:", UnistylesRuntime.themeName)
+
+// 获取屏幕方向
+    console.log("current_orientation_:", UnistylesRuntime.orientation)
+
     navigation.setOptions({
       title: title
     })
