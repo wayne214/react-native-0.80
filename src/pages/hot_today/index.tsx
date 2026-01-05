@@ -64,9 +64,23 @@ const HotNewsList: React.FC = () => {
   const { newsList, currentPage, hasMore, error } = useSelector((state: RootState) => state.news);
   const { isLoading } = useSelector((state: RootState) => state.loading);
 
-  const getNewsData = useCallback(async (page: number = 1, isRefresh: boolean = false): Promise<void> => {
-    if (isLoading && !isRefresh) return; // 防止重复请求
+  // 添加一个状态来跟踪当前是否正在进行请求
+  const [isRequesting, setIsRequesting] = React.useState(false);
+  const isRequestingRef = React.useRef(isRequesting);
+  
+  // 更新 ref 以保持与状态同步
+  React.useEffect(() => {
+    isRequestingRef.current = isRequesting;
+  }, [isRequesting]);
 
+  const getNewsData = useCallback(async (page: number = 1, isRefresh: boolean = false): Promise<void> => {
+    // 防止重复请求：检查全局loading状态和本地请求状态
+    if ((isLoading || isRequestingRef.current) && !isRefresh) return;
+    
+    // 设置本地请求状态以防止重复请求
+    setIsRequesting(true);
+    isRequestingRef.current = true;
+    
     try {
       dispatch(showLoading('加载中...'));
       dispatch(setError(null));
@@ -113,6 +127,9 @@ const HotNewsList: React.FC = () => {
     } finally {
       dispatch(hideLoading());
       LoadingManager.hide();
+      // 重置本地请求状态
+      setIsRequesting(false);
+      isRequestingRef.current = false;
     }
   }, [dispatch, isLoading])
 
@@ -157,16 +174,17 @@ const HotNewsList: React.FC = () => {
   }, [navigation])
 
   // 下拉刷新处理
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
+    if (isLoading || isRequestingRef.current) return; // 防止重复刷新
     await getNewsData(1, true);
-  };
+  }, [getNewsData, isLoading]);
 
   // 上拉加载更多处理
-  const handleLoadMore = async () => {
-    if (hasMore) {
+  const handleLoadMore = useCallback(async () => {
+    if (hasMore && !isLoading && !isRequestingRef.current) {
       await getNewsData(currentPage);
     }
-  };
+  }, [hasMore, currentPage, getNewsData, isLoading]);
 
   const renderItem = useCallback(({ item, index }: RenderItemProps) => {
     return (
@@ -214,9 +232,10 @@ const HotNewsList: React.FC = () => {
 
   // 重试加载
   const retryLoad = useCallback(() => {
+    if (isLoading || isRequestingRef.current) return; // 防止重复请求
     dispatch(setError(null));
     getNewsData(1, true);
-  }, []);
+  }, [dispatch, getNewsData, isLoading]);
 
   // 优化的 keyExtractor
   const keyExtractor = useCallback((item: NewsItem, index: number): string => {
