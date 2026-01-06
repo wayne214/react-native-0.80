@@ -3,7 +3,7 @@ import { View } from "react-native";
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import DateTimePicker, { DateType, useDefaultStyles } from 'react-native-ui-datepicker';
 
-const ToolsPage = () => {
+const CalendarPage = () => {
   const defaultStyles = useDefaultStyles();
   const [selected, setSelected] = useState<DateType>();
   const [selectedDate, setSelectedDate] = useState('');
@@ -34,4 +34,4 @@ const ToolsPage = () => {
   );
 }
 
-export default ToolsPage
+export default CalendarPage

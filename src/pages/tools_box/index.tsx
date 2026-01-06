@@ -4,13 +4,19 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const ToolsHome = () => {
   const navigation = useNavigation();
-  const gotoToolPage  = useCallback(() => {
-    navigation.navigate("ToolsPage", {})
+  const gotoCalendarPage  = useCallback(() => {
+    navigation.navigate("CalendarPage", {})
+  },[])
+  const gotoVideoPage  = useCallback(() => {
+    navigation.navigate("VideoPage", {})
   },[])
   return (
     <View style={styles.container}>
-      <Pressable onPress={gotoToolPage}>
+      <Pressable onPress={gotoCalendarPage}>
         <Text style={styles.buttonText}>日历组件</Text>
+      </Pressable>
+      <Pressable onPress={gotoVideoPage}>
+        <Text style={styles.buttonText}>视频组件</Text>
       </Pressable>
 
     </View>
@@ -20,8 +26,7 @@ const ToolsHome = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    paddingTop: 20
+    alignItems: 'center'
   },
   button: {
     backgroundColor: 'blue',
@@ -34,6 +39,7 @@ const styles = StyleSheet.create({
     backgroundColor : 'royalblue',
     paddingVertical: 10,
     paddingHorizontal: 30,
+    marginTop: 10,
     borderRadius: 10,
     alignContent: 'center',
   }

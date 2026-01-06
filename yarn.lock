@@ -6468,6 +6468,11 @@ react-native-url-polyfill@^2.0.0:
   dependencies:
     whatwg-url-without-unicode "8.0.0-3"
 
+react-native-video@^7.0.0-beta.2:
+  version "7.0.0-beta.2"
+  resolved "https://registry.npmmirror.com/react-native-video/-/react-native-video-7.0.0-beta.2.tgz#2bc0e5fc4d3e2573c8bcd4eb718461b78e90a48d"
+  integrity sha512-caFw6zNZCxmkrH42kw8DGj3ygPlwnvk9n23p/q0v36gz8LerB3xN1wGwKyt8esKmy4JsDJALDsIr+cbEH7NNlw==
+
 react-native-webview@^13.15.0:
   version "13.15.0"
   resolved "https://registry.npmmirror.com/react-native-webview/-/react-native-webview-13.15.0.tgz"
