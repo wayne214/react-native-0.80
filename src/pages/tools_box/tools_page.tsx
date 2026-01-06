@@ -23,7 +23,7 @@ const ToolsPage = () => {
 
       <Calendar
         onDayPress={day => {
-          setSelected(day.dateString);
+          setSelectedDate(day.dateString);
         }}
         markedDates={{
           [selectedDate]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}
