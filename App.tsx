@@ -36,6 +36,8 @@ import { queryClient } from './src/query/queryClient';
 import QueryExample from './src/query/queryExample.tsx';
 import HotNewsList from "./src/pages/hot_today";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ToolsPage from "./src/pages/tools_box/tools_page.tsx";
+import ToolsHome from "./src/pages/tools_box";
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -63,6 +65,13 @@ const HomeTabs = createBottomTabNavigator({
         tabBarIcon: () => <Text>📰</Text>,
       }
     },
+    Tools: {
+        screen: ToolsHome,
+        options: {
+            title: '工具箱',
+            tabBarIcon: () => <Text>📰</Text>,
+        }
+    }
   },
 });
 
@@ -74,7 +83,8 @@ const RootStack = createNativeStackNavigator({
         headerShown: false,
       }
     },
-    Details: NewsDetail
+    Details: NewsDetail,
+    ToolsPage:ToolsPage,
   },
 });
 
