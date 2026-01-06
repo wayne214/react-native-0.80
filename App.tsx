@@ -85,8 +85,18 @@ const RootStack = createNativeStackNavigator({
       }
     },
     Details: NewsDetail,
-    CalendarPage: CalendarPage,
-    VideoPage: VideoPage,
+    CalendarPage: {
+        screen: CalendarPage,
+        options: {
+            title: '日历组件',
+        }
+    },
+    VideoPage: {
+        screen: VideoPage,
+        options: {
+            title: '视频组件',
+        }
+    },
   },
 });
 

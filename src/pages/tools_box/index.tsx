@@ -6,10 +6,10 @@ const ToolsHome = () => {
   const navigation = useNavigation();
   const gotoCalendarPage  = useCallback(() => {
     navigation.navigate("CalendarPage", {})
-  },[])
+  },[navigation])
   const gotoVideoPage  = useCallback(() => {
     navigation.navigate("VideoPage", {})
-  },[])
+  },[navigation])
   return (
     <View style={styles.container}>
       <Pressable onPress={gotoCalendarPage}>
