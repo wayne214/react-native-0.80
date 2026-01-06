@@ -4286,7 +4286,7 @@ hermes-parser@0.29.1:
   dependencies:
     hermes-estree "0.29.1"
 
-hoist-non-react-statics@^3.3.0:
+hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1:
   version "3.3.2"
   resolved "https://registry.npmmirror.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz"
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
@@ -5371,7 +5371,7 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash.debounce@^4.0.8:
+lodash.debounce@4.0.8, lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.npmmirror.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
@@ -5391,7 +5391,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npmmirror.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-lodash@^4.17.21:
+lodash@^4.17.15, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.npmmirror.com/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -5466,7 +5466,7 @@ media-typer@0.3.0:
   resolved "https://registry.npmmirror.com/media-typer/-/media-typer-0.3.0.tgz"
   integrity sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==
 
-memoize-one@^5.0.0:
+memoize-one@^5.0.0, memoize-one@^5.2.1:
   version "5.2.1"
   resolved "https://registry.npmmirror.com/memoize-one/-/memoize-one-5.2.1.tgz"
   integrity sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==
@@ -5742,6 +5742,11 @@ mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmmirror.com/mkdirp/-/mkdirp-1.0.4.tgz"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+
+moment@^2.29.4:
+  version "2.30.1"
+  resolved "https://registry.npmmirror.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
+  integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
 
 ms@2.0.0:
   version "2.0.0"
@@ -6229,7 +6234,7 @@ prompts@^2.0.1, prompts@^2.4.2:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.8.1:
+prop-types@15.8.1, prop-types@^15.5.10, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmmirror.com/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -6325,6 +6330,22 @@ react-is@^19.1.0:
   resolved "https://registry.npmmirror.com/react-is/-/react-is-19.1.1.tgz"
   integrity sha512-tr41fA15Vn8p4X9ntI+yCyeGSf1TlYaY5vlTZfQmeLBrFo3psOPX6HhTDnFNL9uj3EhP0KAQ80cugCl4b4BERA==
 
+react-native-calendars@^1.1313.0:
+  version "1.1313.0"
+  resolved "https://registry.npmmirror.com/react-native-calendars/-/react-native-calendars-1.1313.0.tgz#c2e9ac84e0043daeace899d1dc5030afaf354683"
+  integrity sha512-YQ7Vg57rBRVymolamYDTxZ0lPOELTDHQbTukTWdxR47aRBYJwKI6ocRbwcY5gYgyDwNgJS4uLGu5AvmYS74LYQ==
+  dependencies:
+    hoist-non-react-statics "^3.3.1"
+    lodash "^4.17.15"
+    memoize-one "^5.2.1"
+    prop-types "^15.5.10"
+    react-native-safe-area-context "4.5.0"
+    react-native-swipe-gestures "^1.0.5"
+    recyclerlistview "^4.0.0"
+    xdate "^0.8.0"
+  optionalDependencies:
+    moment "^2.29.4"
+
 react-native-css-interop@0.2.1:
   version "0.2.1"
   resolved "https://registry.npmmirror.com/react-native-css-interop/-/react-native-css-interop-0.2.1.tgz"
@@ -6383,6 +6404,11 @@ react-native-reanimated@^4.2.1:
     react-native-is-edge-to-edge "1.2.1"
     semver "7.7.3"
 
+react-native-safe-area-context@4.5.0:
+  version "4.5.0"
+  resolved "https://registry.npmmirror.com/react-native-safe-area-context/-/react-native-safe-area-context-4.5.0.tgz#9208313236e8f49e1920ac1e2a2c975f03aed284"
+  integrity sha512-0WORnk9SkREGUg2V7jHZbuN5x4vcxj/1B0QOcXJjdYWrzZHgLcUzYWWIUecUPJh747Mwjt/42RZDOaFn3L8kPQ==
+
 react-native-safe-area-context@^5.6.0:
   version "5.6.0"
   resolved "https://registry.npmmirror.com/react-native-safe-area-context/-/react-native-safe-area-context-5.6.0.tgz"
@@ -6405,6 +6431,11 @@ react-native-svg@^15.12.1:
     css-select "^5.1.0"
     css-tree "^1.1.3"
     warn-once "0.1.1"
+
+react-native-swipe-gestures@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.npmmirror.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
+  integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
 
 react-native-ui-datepicker@^3.1.2:
   version "3.1.2"
@@ -6558,6 +6589,15 @@ readdirp@~3.6.0:
   integrity sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==
   dependencies:
     picomatch "^2.2.1"
+
+recyclerlistview@^4.0.0:
+  version "4.2.3"
+  resolved "https://registry.npmmirror.com/recyclerlistview/-/recyclerlistview-4.2.3.tgz#14032e7ad2f24396e24d5b3060c6ba76b567f000"
+  integrity sha512-STR/wj/FyT8EMsBzzhZ1l2goYirMkIgfV3gYEPxI3Kf3lOnu6f7Dryhyw7/IkQrgX5xtTcDrZMqytvteH9rL3g==
+  dependencies:
+    lodash.debounce "4.0.8"
+    prop-types "15.8.1"
+    ts-object-utils "0.0.5"
 
 redent@^3.0.0:
   version "3.0.0"
@@ -7341,6 +7381,11 @@ ts-jest@^29.4.5:
     type-fest "^4.41.0"
     yargs-parser "^21.1.1"
 
+ts-object-utils@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.npmmirror.com/ts-object-utils/-/ts-object-utils-0.0.5.tgz#95361cdecd7e52167cfc5e634c76345e90a26077"
+  integrity sha512-iV0GvHqOmilbIKJsfyfJY9/dNHCs969z3so90dQWsO1eMMozvTpnB1MEaUbb3FYtZTGjv5sIy/xmslEz0Rg2TA==
+
 tslib@2.3.0:
   version "2.3.0"
   resolved "https://registry.npmmirror.com/tslib/-/tslib-2.3.0.tgz"
@@ -7720,6 +7765,11 @@ ws@^7, ws@^7.5.10:
   version "7.5.10"
   resolved "https://registry.npmmirror.com/ws/-/ws-7.5.10.tgz"
   integrity sha512-+dbF1tHwZpXcbOJdVOkzLDxZP1ailvSxM6ZweXTegylPny803bFhA+vqBYw4s31NSAk4S2Qz+AKXK9a4wkdjcQ==
+
+xdate@^0.8.0:
+  version "0.8.3"
+  resolved "https://registry.npmmirror.com/xdate/-/xdate-0.8.3.tgz#422068681eeac81f68acffa1a38cd287bb179b85"
+  integrity sha512-1NhJWPJwN+VjbkACT9XHbQK4o6exeSVtS2CxhMPwUE7xQakoEFTlwra9YcqV/uHQVyeEUYoYC46VGDJ+etnIiw==
 
 y18n@^4.0.0:
   version "4.0.3"
