@@ -39,6 +39,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import CalendarPage from "./src/pages/tools_box/calendar_page.tsx";
 import ToolsHome from "./src/pages/tools_box";
 import VideoPage from "./src/pages/tools_box/video_page.tsx";
+import ChartsPage from "./src/pages/tools_box/charts_page.tsx";
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -97,6 +98,12 @@ const RootStack = createNativeStackNavigator({
             title: '视频组件',
         }
     },
+      ChartsPage: {
+      screen: ChartsPage,
+      options: {
+          title: '图表组件',
+      }
+  },
   },
 });
 

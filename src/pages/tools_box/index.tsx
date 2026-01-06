@@ -4,12 +4,19 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const ToolsHome = () => {
   const navigation = useNavigation();
+
   const gotoCalendarPage  = useCallback(() => {
     navigation.navigate("CalendarPage", {})
   },[navigation])
+
   const gotoVideoPage  = useCallback(() => {
     navigation.navigate("VideoPage", {})
   },[navigation])
+
+  const gotoChartPage  = useCallback(() => {
+    navigation.navigate("ChartsPage", {})
+  },[navigation])
+
   return (
     <View style={styles.container}>
       <Pressable onPress={gotoCalendarPage}>
@@ -17,6 +24,9 @@ const ToolsHome = () => {
       </Pressable>
       <Pressable onPress={gotoVideoPage}>
         <Text style={styles.buttonText}>视频组件</Text>
+      </Pressable>
+      <Pressable onPress={gotoChartPage}>
+        <Text style={styles.buttonText}>图表组件</Text>
       </Pressable>
 
     </View>
