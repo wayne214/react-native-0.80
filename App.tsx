@@ -41,6 +41,9 @@ import ToolsHome from "./src/pages/tools_box";
 import VideoPage from "./src/pages/tools_box/video_page.tsx";
 import ChartsPage from "./src/pages/tools_box/charts_page.tsx";
 import ArticlesPage from "./src/pages/articles/index.tsx";
+import TutorialPage from "./src/pages/tutorial";
+import TutorialDetailPage from "./src/pages/tutorial/detail";
+import WebViewPage from "./src/pages/webview/index";
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -110,6 +113,25 @@ const RootStack = createNativeStackNavigator({
       screen: ChartsPage,
       options: {
           title: '图表组件',
+      }
+  },
+    TutorialPage: {
+      screen: TutorialPage,
+      options: {
+          title: '教程页面',
+      }
+  },
+    TutorialDetailPage: {
+      screen: TutorialDetailPage,
+      options: {
+          title: '教程详情',
+      }
+  },
+    WebViewPage: {
+      screen: WebViewPage,
+      options: {
+          title: '网页详情',
+          headerShown: false,
       }
   },
   },
