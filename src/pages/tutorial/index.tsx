@@ -73,32 +73,39 @@ const TutorialPage = () => {
       style={styles.tutorialItem}
       onPress={() => openTutorial(item)}
     >
-      {item.cover ? (
-        <Image
-          source={{ uri: item.cover }}
-          style={styles.tutorialCover}
-        />
-      ) : null}
-      <View style={styles.tutorialContent}>
-        <Text style={styles.tutorialTitle} numberOfLines={2}>
-          {item.name}
-        </Text>
-        <Text style={styles.tutorialDesc} numberOfLines={2}>
-          {item.desc}
-        </Text>
-        <Text style={styles.tutorialAuthor}>
-          作者: {item.author}
-        </Text>
+      <View style={styles.tutorialRow}>
+        {item.cover ? (
+          <Image
+            source={{ uri: item.cover }}
+            style={styles.tutorialCover}
+            resizeMode="contain"
+          />
+        ) : (
+          <View style={styles.tutorialCoverPlaceholder}>
+            <Text style={styles.coverPlaceholderText}>📚</Text>
+          </View>
+        )}
+        <View style={styles.tutorialContent}>
+          <Text style={styles.tutorialTitle} numberOfLines={2}>
+            {item.name}
+          </Text>
+          <Text style={styles.tutorialDesc} numberOfLines={2}>
+            {item.desc}
+          </Text>
+          <Text style={styles.tutorialAuthor}>
+            作者: {item.author}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerTitle}>📚 教程列表</Text>
         <Text style={styles.headerSubtitle}>WanAndroid 教程专区</Text>
-      </View>
+      </View> */}
 
       <RefreshableList
         data={tutorials}
@@ -152,9 +159,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginHorizontal: 16,
     marginVertical: 6,
-    padding: 16,
+    padding: 10,
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: '#00f',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -173,10 +180,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   tutorialCover: {
-    width: 60,
-    height: 60,
-    borderRadius: 8,
-    marginRight: 12,
+    width: 80,
+    height: 100,
+    borderRadius: 5,
+    marginRight: 10,
   },
   tutorialContent: {
     flex: 1,
@@ -191,6 +198,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#999',
     fontStyle: 'italic',
+  },
+  tutorialRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  tutorialCoverPlaceholder: {
+    width: 60,
+    height: 100,
+    borderRadius: 5,
+    backgroundColor: '#f0f0f0',
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  coverPlaceholderText: {
+    fontSize: 24,
   },
 });
 

@@ -125,10 +125,10 @@ const TutorialDetailPage: React.FC<TutorialDetailProps> = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerTitle}>📚 教程详情</Text>
         <Text style={styles.headerSubtitle}>教程 ID: {tutorialId}</Text>
-      </View>
+      </View> */}
 
       <RefreshableList
         data={articles}

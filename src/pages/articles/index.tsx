@@ -98,14 +98,12 @@ const ArticlesPage = () => {
     });
   };
   
-  const openHarmonyPage = async () => {
-    const harmonyUrl = 'https://wanandroid.com/harmony/index';
-    const supported = await Linking.canOpenURL(harmonyUrl);
-    if (supported) {
-      await Linking.openURL(harmonyUrl);
-    } else {
-      Alert.alert('提示', '无法打开鸿蒙专栏页面');
-    }
+  const openHarmonyPage = () => {
+    // 导航到鸿蒙专栏的 WebView 页面
+    navigation.navigate('WebViewPage', { 
+      url: 'https://wanandroid.com/harmony/index',
+      title: '鸿蒙专栏'
+    });
   };
   
   const openTutorialPage = () => {
@@ -133,26 +131,27 @@ const ArticlesPage = () => {
   
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerTitle}>📚 技术文章</Text>
         <Text style={styles.headerSubtitle}>WanAndroid 技术文章</Text>
+      </View> */}
+      
+      {/* 入口标签流式布局 */}
+      <View style={styles.entriesContainer}>
+        <TouchableOpacity 
+          style={styles.entryTag}
+          onPress={openHarmonyPage}
+        >
+          <Text style={styles.entryTagText}>鸿蒙专栏</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.entryTag}
+          onPress={openTutorialPage}
+        >
+          <Text style={styles.entryTagText}>教程入口</Text>
+        </TouchableOpacity>
       </View>
-      
-      {/* 鸿蒙专栏入口 */}
-      <TouchableOpacity 
-        style={styles.harmonyEntry}
-        onPress={openHarmonyPage}
-      >
-        <Text style={styles.harmonyEntryText}>鸿蒙专栏</Text>
-      </TouchableOpacity>
-      
-      {/* 教程入口 */}
-      <TouchableOpacity 
-        style={styles.tutorialEntry}
-        onPress={openTutorialPage}
-      >
-        <Text style={styles.tutorialEntryText}>教程入口</Text>
-      </TouchableOpacity>
       
       <RefreshableList
         data={articles}
@@ -269,6 +268,26 @@ const styles = StyleSheet.create({
   tutorialEntryText: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#fff',
+  },
+  entriesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    gap: 8,
+  },
+  entryTag: {
+    backgroundColor: '#4ecdc4',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  entryTagText: {
+    fontSize: 14,
+    fontWeight: '500',
     color: '#fff',
   },
 });
