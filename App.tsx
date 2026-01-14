@@ -40,6 +40,7 @@ import CalendarPage from "./src/pages/tools_box/calendar_page.tsx";
 import ToolsHome from "./src/pages/tools_box";
 import VideoPage from "./src/pages/tools_box/video_page.tsx";
 import ChartsPage from "./src/pages/tools_box/charts_page.tsx";
+import ArticlesPage from "./src/pages/articles/index.tsx";
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -67,11 +68,18 @@ const HomeTabs = createBottomTabNavigator({
         tabBarIcon: () => <Text>📰</Text>,
       }
     },
+    Articles: {
+      screen: ArticlesPage,
+      options: {
+        title: '文章',
+        tabBarIcon: () => <Text>📚</Text>,
+      }
+    },
     Tools: {
         screen: ToolsHome,
         options: {
             title: '工具箱',
-            tabBarIcon: () => <Text>📰</Text>,
+            tabBarIcon: () => <Text>🔧</Text>,
         }
     }
   },
