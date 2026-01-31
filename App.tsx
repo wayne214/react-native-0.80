@@ -162,13 +162,6 @@ const RootStack = createNativeStackNavigator({
         headerShown: true,
       }
     },
-    Profile: {
-      screen: ProfilePage,
-      options: {
-        title: '个人中心',
-        headerShown: true,
-      }
-    },
     Favorites: {
       screen: FavoritesPage,
       options: {

@@ -63,7 +63,7 @@ function NewsDetail (){
   const toggleFavorite = () => {
     if (!isAuthenticated) {
       // 如果未登录，引导用户登录
-      navigation.navigate('Login');
+      navigation.navigate('Login' as never);
       return;
     }
     

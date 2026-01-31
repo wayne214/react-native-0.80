@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import newsReducer from './newsSlice.ts';
-import loadingReducer from './loadingSlice.ts';
-import userReducer from './userSlice.ts';
+import newsReducer from './newsSlice';
+import loadingReducer from './loadingSlice';
+import userReducer from './userSlice';
+import { userDataPersistenceMiddleware } from './userPersistenceMiddleware';
 
 export const store = configureStore({
   reducer: {
@@ -9,6 +10,8 @@ export const store = configureStore({
     loading: loadingReducer,
     user: userReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(userDataPersistenceMiddleware),
 });
 
 // 为 RootState 添加更具体的类型定义
