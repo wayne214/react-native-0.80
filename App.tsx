@@ -27,7 +27,7 @@ import {UpdateProvider, Pushy, Cresc, useUpdate} from 'react-native-update';
 import {LoadingProvider} from "./src/component/loading/LoadingManager";
 import {useState} from "react";
 // 添加Redux相关导入
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store } from './src/store';
 import Counter from './src/zud_store/Counter.tsx';
 // 添加TanStack Query相关导入
@@ -44,6 +44,13 @@ import ArticlesPage from "./src/pages/articles/index.tsx";
 import TutorialPage from "./src/pages/tutorial";
 import TutorialDetailPage from "./src/pages/tutorial/detail";
 import WebViewPage from "./src/pages/webview/index";
+// 导入用户系统相关页面
+import LoginPage from "./src/pages/auth/LoginPage";
+import RegisterPage from "./src/pages/auth/RegisterPage";
+import ProfilePage from "./src/pages/auth/ProfilePage";
+import FavoritesPage from "./src/pages/auth/FavoritesPage";
+import HistoryPage from "./src/pages/auth/HistoryPage";
+import { RootState } from './src/store';
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
 // 唯一必填参数是appKey，其他选项请参阅 api 文档
@@ -83,6 +90,13 @@ const HomeTabs = createBottomTabNavigator({
         options: {
             title: '工具箱',
             tabBarIcon: () => <Text>🔧</Text>,
+        }
+    },
+    Profile: {
+        screen: ProfilePage,
+        options: {
+            title: '我的',
+            tabBarIcon: () => <Text>👤</Text>,
         }
     }
   },
@@ -134,6 +148,41 @@ const RootStack = createNativeStackNavigator({
           headerShown: false,
       }
   },
+    Login: {
+      screen: LoginPage,
+      options: {
+        title: '登录',
+        headerShown: true,
+      }
+    },
+    Register: {
+      screen: RegisterPage,
+      options: {
+        title: '注册',
+        headerShown: true,
+      }
+    },
+    Profile: {
+      screen: ProfilePage,
+      options: {
+        title: '个人中心',
+        headerShown: true,
+      }
+    },
+    Favorites: {
+      screen: FavoritesPage,
+      options: {
+        title: '我的收藏',
+        headerShown: true,
+      }
+    },
+    History: {
+      screen: HistoryPage,
+      options: {
+        title: '浏览历史',
+        headerShown: true,
+      }
+    },
   },
 });
 
