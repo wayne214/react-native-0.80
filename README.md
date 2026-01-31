@@ -1,43 +1,48 @@
-# RNDemo80
+# RNDemo80 - 新闻资讯移动应用
 
-一个基于 React Native 的新闻资讯移动应用，提供每日新闻浏览和实时热点资讯功能。
+[![React Native](https://img.shields.io/badge/React_Native-0.80.2-2f80ed?style=flat&logo=react)](https://reactnative.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-007acc?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Platform](https://img.shields.io/badge/platform-iOS_|_Android-9cf?style=flat)](https://reactnative.dev/)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat)](LICENSE)
 
-## 📱 项目简介
+一个基于 React Native 的现代化新闻资讯移动应用，提供每日新闻浏览、实时热点资讯和丰富的工具箱功能。
 
-RNDemo80 是一个功能完整的新闻类移动应用，采用现代化的 React Native 技术栈开发，支持跨平台运行于 Android 和 iOS 设备。
-特别说明，node >= 18, jdk 17
+## 🚀 项目简介
 
-### 🎯 主要功能
+RNDemo80 是一款功能丰富的跨平台新闻阅读应用，采用现代化的 React Native 技术栈构建。该应用为用户提供每日新闻摘要、实时热点追踪以及实用工具箱，支持 Android 和 iOS 双平台运行。
 
-- **📰 每日60秒读懂世界**：通过 WebView 展示每日图文新闻
-- **🔥 今日热闻列表**：展示实时热点新闻条目，支持列表浏览
-- **📝 新闻详情页**：点击新闻条目跳转至详情页面查看完整内容
-- **🔄 下拉刷新**：支持用户手动下拉刷新获取最新内容
-- **⚡ 加载状态管理**：集成统一的全局加载提示组件
-- **🚀 热更新支持**：通过 react-native-update 实现应用热修复与版本更新
-- **🧰 工具箱功能**：包含日历组件、视频播放器和图表组件等实用工具
+> **环境要求**: Node.js >= 18, JDK 17
+
+### ✨ 核心特性
+
+- **📰 每日新闻** - 提供每日60秒读懂世界的图文新闻摘要
+- **🔥 实时热点** - 展示最新热点新闻列表，支持下拉刷新
+- **📝 详情阅读** - 流畅的新闻详情页面浏览体验
+- **📱 跨平台** - 一次编写，多端运行 (Android & iOS)
+- **⚡ 性能优化** - 使用 FlashList 实现高性能列表渲染
+- **🔄 状态管理** - Redux Toolkit + TanStack Query 数据管理
+- **🎨 美观界面** - Material Design 风格 UI 组件
+- **🛠️ 工具箱** - 集成日历、视频播放、图表等实用功能
 
 ### 🛠️ 技术栈
 
-| 技术/库 | 版本 | 用途 |
+| 技术/库 | 版本 | 描述 |
 |--------|------|------|
 | React Native | 0.80.2 | 跨平台移动开发框架 |
 | TypeScript | 5.0.4 | 类型安全的 JavaScript 超集 |
-| React Navigation 7 | ^7.1.17 | 页面路由与导航管理 |
+| React Navigation | ^7.1.17 | 页面路由与导航管理 |
+| Redux Toolkit | latest | 状态管理解决方案 |
+| TanStack Query | latest | 服务端状态管理和缓存 |
 | Axios | ^1.11.0 | HTTP 请求客户端 |
-| React Native WebView | ^13.15.0 | 内嵌网页浏览器 |
 | FlashList | ^2.0.2 | 高性能列表渲染组件 |
 | React Native Paper | ^5.14.5 | Material Design UI 组件库 |
-| react-native-update | ^10.30.3 | 热更新解决方案 |
-| @reduxjs/toolkit | latest | Redux 状态管理 |
-| react-redux | latest | Redux React 绑定 |
-| @tanstack/react-query | latest | 数据获取和缓存管理 |
-| react-native-calendars | ^1.1265.0 | 日历组件 |
-| react-native-ui-datepicker | ^2.0.0 | 日期选择器 |
-| react-native-video | ^6.0.0 | 视频播放器 |
-| react-native-gifted-charts | ^1.4.41 | 图表组件 |
+| React Native WebView | ^13.15.0 | 内嵌网页浏览器 |
+| React Native Video | ^6.0.0 | 视频播放器组件 |
+| React Native Calendars | ^1.1265.0 | 日历组件 |
+| React Native Gifted Charts | ^1.4.41 | 图表组件 |
+| React Native Update | ^10.30.3 | 应用热更新解决方案 |
 
-### 📁 项目结构
+## 📁 项目结构
 
 ```
 src/
@@ -59,9 +64,25 @@ src/
 
 ## 🚀 快速开始
 
-> **注意**: 请确保您已经完成了 [React Native 开发环境搭建](https://reactnative.dev/docs/set-up-your-environment)。
+### 环境准备
 
-### 1. 安装依赖
+在开始之前，请确保已安装以下依赖：
+
+- [Node.js](https://nodejs.org/) (>= 18.x)
+- [JDK](https://openjdk.org/) (17.x)
+- 对于 iOS 开发: [Xcode](https://developer.apple.com/xcode/) 和 [CocoaPods](https://cocoapods.org/)
+- 对于 Android 开发: [Android Studio](https://developer.android.com/studio) 和 Android SDK
+
+### 本地开发
+
+1. **克隆项目**
+
+```bash
+git clone https://github.com/your-username/RNDemo80.git
+cd RNDemo80
+```
+
+2. **安装依赖**
 
 ```bash
 # 使用 npm
@@ -71,168 +92,127 @@ npm install
 yarn install
 ```
 
-### 2. 启动 Metro 服务器
-
-首先需要启动 Metro（React Native 的 JavaScript 构建工具）：
+3. **iOS 平台配置 (仅限 macOS)**
 
 ```bash
-# 使用 npm
-npm start
-
-# 或使用 Yarn
-yarn start
+# 安装 CocoaPods 依赖
+cd ios && pod install && cd ..
 ```
 
-### 3. 运行应用
-
-在 Metro 服务器运行的情况下，打开新的终端窗口，使用以下命令构建并运行应用：
-
-#### Android
+4. **启动开发服务器**
 
 ```bash
-# 使用 npm
+# 启动 Metro 服务器
+npm start
+```
+
+5. **运行应用**
+
+```bash
+# 运行 Android 应用
 npm run android
 
-# 或使用 Yarn
-yarn android
-```
-
-#### iOS
-
-对于 iOS，需要先安装 CocoaPods 依赖（仅在首次克隆或更新原生依赖后需要运行）：
-
-```bash
-# 首次创建项目时，运行 Ruby bundler 安装 CocoaPods
-bundle install
-
-# 然后，每次更新原生依赖时都需要运行
-bundle exec pod install
-```
-
-更多信息请参考 [CocoaPods 入门指南](https://guides.cocoapods.org/using/getting-started.html)。
-
-```bash
-# 使用 npm
+# 运行 iOS 应用 (macOS)
 npm run ios
-
-# 或使用 Yarn
-yarn ios
 ```
-
-如果一切设置正确，您应该能看到应用在 Android 模拟器、iOS 模拟器或您的真机设备上运行。
-
-您也可以直接从 Android Studio 或 Xcode 构建和运行应用。
-
-### 4. 开发调试
-
-现在您已经成功运行了应用，可以开始开发了！
-
-打开 `App.tsx` 或 `src/` 目录下的任何文件进行修改。保存后，应用会自动更新并反映这些更改——这是由 [Fast Refresh](https://reactnative.dev/docs/fast-refresh) 功能提供的。
-
-当您需要强制重新加载（例如重置应用状态）时，可以执行完全重载：
-
-- **Android**: 按两次 <kbd>R</kbd> 键或从开发菜单中选择 **"Reload"**（通过 <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) 或 <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS) 访问开发菜单）
-- **iOS**: 在 iOS 模拟器中按 <kbd>R</kbd> 键
 
 ## 📋 可用脚本
 
-```bash
-npm start          # 启动 Metro 开发服务器
-npm run android    # 运行 Android 应用
-npm run ios        # 运行 iOS 应用
-npm run lint       # 运行 ESLint 代码检查
-npm test           # 运行测试
-```
+| 脚本 | 描述 |
+|------|------|
+| `npm start` | 启动 Metro 开发服务器 |
+| `npm run android` | 构建并运行 Android 应用 |
+| `npm run ios` | 构建并运行 iOS 应用 |
+| `npm run lint` | 运行 ESLint 代码检查 |
+| `npm test` | 运行单元测试 |
+| `npm run build:android` | 构建 Android 发布版 APK |
+| `npm run build:ios` | 构建 iOS 发布版 IPA |
 
-## 🧪 状态管理开发脚本
+## 🎯 核心功能
 
-项目集成了 Redux 和 TanStack Query 进行状态管理，开发时可以使用以下工具：
-
-- Redux DevTools: 在开发模式下可以安装浏览器扩展来调试 Redux 状态变化
-- React Query DevTools: 可以可视化查看缓存状态和网络请求
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## 🎯 核心功能介绍
-
-### 每日新闻页面
-- 自动获取每日图文新闻内容
+### 每日新闻
+- 自动获取每日图文新闻内容 (`https://api.03c3.cn/api/zb?type=jsonImg`)
 - 使用 WebView 组件展示新闻图片
-- 使用 TanStack Query 进行数据获取和缓存管理
-- 数据来源：`https://api.03c3.cn/api/zb?type=jsonImg`
+- 集成 TanStack Query 进行数据缓存和管理
 
-### 今日热闻页面
-- 展示实时热点新闻列表
+### 今日热闻
+- 实时热点新闻列表 (`https://api-hot.imsyy.top/toutiao`)
 - 支持下拉刷新获取最新数据
-- 点击新闻条目跳转到详情页面
-- 使用高性能的 FlashList 组件渲染列表
-- 使用 Redux Toolkit 管理新闻列表状态
-- 数据来源：`https://api-hot.imsyy.top/toutiao`
+- 高性能 FlashList 渲染大量新闻条目
+- Redux Toolkit 状态管理
 
-### 新闻详情页
-- 通过 WebView 加载外部新闻页面
-- 动态设置导航栏标题
-- 支持网页内容的完整展示
+### 工具箱
+- **日历组件**: 提供日期选择和日历视图
+- **视频播放器**: 支持多种格式的视频播放
+- **图表组件**: 多种可视化图表展示数据
 
-### 工具箱功能
-- **日历组件**：集成 react-native-calendars 和 react-native-ui-datepicker，提供日历和日期选择功能
-- **视频播放器**：使用 react-native-video 实现视频播放功能，支持多种视频格式和流媒体
-- **图表组件**：集成 react-native-gifted-charts，提供多种图表类型如柱状图、折线图、饼图等
+## 🧪 开发工具
 
-## 🏗️ 架构特点
+- **Redux DevTools**: 调试 Redux 状态变化
+- **React Native Debugger**: 综合调试工具
+- **Flipper**: 移动应用调试平台
+- **ESLint + Prettier**: 代码质量和格式化
 
-- **分层架构**：页面层、组件层、API 层清晰分离
-- **组件复用**：可复用的刷新组件和加载组件
-- **类型安全**：全面使用 TypeScript 确保代码质量
-- **现代导航**：使用 React Navigation 7 实现流畅的页面切换
-- **状态管理**：集成 Redux Toolkit 进行全局状态管理
-- **数据获取**：使用 TanStack Query 进行数据获取和缓存管理
-- **功能扩展**：新增工具箱模块，集成日历、视频、图表等多种实用功能
+## 🔐 API 说明
 
-## 📊 状态管理
+本项目使用以下公开 API:
 
-### Redux Toolkit
+- 每日新闻: `https://api.03c3.cn/api/zb?type=jsonImg`
+- 热点新闻: `https://api-hot.imsyy.top/toutiao`
 
-项目集成了 Redux Toolkit 进行全局状态管理，主要包括：
+> **注意**: 由于使用的是第三方免费 API，可能存在不稳定的情况。在生产环境中建议使用自己的后端服务。
 
-- **News Slice**: 管理新闻列表、分页信息和错误状态
-- **Loading Slice**: 管理全局加载状态
-- **Store 配置**: 配置了合理的中间件和类型定义
+## 🏗️ 架构设计
 
-### TanStack Query
+- **分层架构**: 清晰的页面、组件、API 分离
+- **类型安全**: 完整的 TypeScript 类型定义
+- **状态管理**: Redux Toolkit + TanStack Query 组合方案
+- **UI 组件**: React Native Paper Material Design 组件库
+- **路由导航**: React Navigation 7 现代化导航方案
 
-使用 TanStack Query (以前称为 React Query) 进行服务器状态管理，提供：
+## 🧪 测试
 
-- **自动缓存**: 智能缓存机制，减少不必要的网络请求
-- **后台更新**: 在后台自动更新数据
-- **错误重试**: 自动重试失败的请求
-- **加载状态**: 自动管理加载和错误状态
+```bash
+# 运行所有测试
+npm test
+
+# 运行测试并生成覆盖率报告
+npm run test:coverage
+
+# 运行特定测试文件
+npm run test -- src/__tests__/example.test.ts
+```
 
 ## 🔧 故障排除
 
-如果在运行上述步骤时遇到问题，请参考 [React Native 故障排除页面](https://reactnative.dev/docs/troubleshooting)。
+常见问题及解决方案:
 
-## 📚 学习资源
+- **iOS 编译错误**: 确保运行了 `pod install` 并且 Xcode 版本兼容
+- **Android 编译错误**: 检查 Android SDK 版本和环境变量配置
+- **Metro 无法启动**: 清除缓存 `npx react-native start --reset-cache`
+- **依赖冲突**: 删除 `node_modules` 并重新安装
 
-- [React Native 官网](https://reactnative.dev) - 了解更多 React Native 相关内容
-- [环境搭建指南](https://reactnative.dev/docs/environment-setup) - React Native 环境搭建概览
-- [基础教程](https://reactnative.dev/docs/getting-started) - React Native 基础知识导览
-- [官方博客](https://reactnative.dev/blog) - 阅读最新的 React Native 官方博客文章
-- [GitHub 仓库](https://github.com/facebook/react-native) - React Native 开源项目
+更多帮助请参考 [React Native 官方文档](https://reactnative.dev/docs/troubleshooting)。
 
-## 🤝 贡献
+## 🤝 贡献指南
 
-欢迎提交 Issues 和 Pull Requests 来改进项目！
+我们欢迎社区贡献！以下是参与项目的方式：
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
+
+请确保更新测试用例并遵循代码规范。
 
 ## 📄 许可证
 
-本项目采用 MIT 许可证。
+本项目采用 [MIT 许可证](./LICENSE)，详情请参阅 [LICENSE 文件](./LICENSE)。
+
+## 🙏 致谢
+
+- [React Native](https://reactnative.dev/) - 跨平台移动开发框架
+- [Redux Toolkit](https://redux-toolkit.js.org/) - 状态管理工具
+- [TanStack Query](https://tanstack.com/query) - 服务端状态管理
+- 所有开源库的维护者和贡献者们
