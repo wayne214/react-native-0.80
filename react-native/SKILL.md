@@ -347,9 +347,28 @@ CI 流程：lint → test → build（并行 iOS/Android） → deploy
 - 不要用 snapshot 测试——维护成本高、易碎，用行为测试
 - 不要在共享文件里写大段 `Platform.OS` if/else——用平台文件扩展名
 
+## 原生模块开发
+
+React Native 0.76+ 使用 TurboModules 替代旧 NativeModules，支持 Codegen 类型安全。
+
+**核心流程**：
+1. 定义 TypeScript 规范（`src/specs/Native*.ts`）
+2. iOS 实现（Swift + ObjC 桥接）
+3. Android 实现（Kotlin）
+4. 配置 Codegen 并运行
+
+**最佳实践**：
+- 原生方法默认在后台线程执行，UI 操作需切到主线程
+- 使用 `Promise.reject` 返回错误，不要抛异常
+- 确保 iOS/Android 返回值类型一致
+- 频繁调用的方法用同步版本，避免 Promise 开销
+
+详细实现示例和完整代码见 `references/native-modules.md`。
+
 ## 详细参考
 
 更深入的内容见 `references/` 目录：
 - `new-architecture-migration.md` — 老项目迁移到新架构的步骤
 - `recommended-libraries.md` — 推荐库的详细说明和使用场景
 - `performance-checklist.md` — 性能优化完整清单
+- `native-modules.md` — 原生模块开发完整指南（TurboModules + NativeModules）

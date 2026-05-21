@@ -153,6 +153,59 @@ npm run ios
 - **Flipper**: 移动应用调试平台
 - **ESLint + Prettier**: 代码质量和格式化
 
+## 🤖 Claude Code Skill
+
+本项目配置了 **React Native Skill**，为 Claude Code 提供专业的 RN 开发指导。
+
+### 功能特性
+
+| 类别 | 推荐方案 |
+|---|---|
+| 框架 | Expo SDK 53+ / Bare RN CLI |
+| 架构 | New Architecture (Fabric + TurboModules) |
+| 导航 | Expo Router v4 / React Navigation v7 |
+| 状态管理 | Zustand + TanStack Query |
+| 样式 | NativeWind / Tamagui |
+| 列表 | FlashList |
+| 动画 | Reanimated v3 + Gesture Handler v2 |
+| 表单 | React Hook Form + Zod |
+| 测试 | Jest + React Native Testing Library |
+| 崩溃上报 | Sentry |
+| CI/CD | EAS Build / GitHub Actions + Fastlane |
+| 存储 | MMKV + WatermelonDB |
+
+### 自动触发条件
+
+当项目目录下存在 `package.json` 且依赖了 `react-native` 或 `expo` 时，以下场景会自动触发 Skill：
+
+- 开发 React Native 应用
+- 创建 RN 项目或组件
+- 调试性能问题
+- 配置导航路由
+- 管理状态
+- 编写原生模块
+- 处理平台差异
+- 优化列表性能
+- 处理动画效果
+- 编写测试用例
+- 集成 Sentry 等第三方服务
+
+### 手动触发
+
+在 Claude Code 对话中输入：
+
+```
+/react-native
+```
+
+### Skill 提供的指导
+
+- **最佳实践**: 基于 Meta/Microsoft/ByteDance/Shopify 等大厂经验
+- **技术选型**: 2025-2026 年最新技术栈推荐
+- **代码示例**: 常见场景的 TypeScript 代码模板
+- **性能优化**: 列表、动画、启动速度等优化策略
+- **New Architecture**: JSI/Fabric/TurboModules 核心概念
+
 ## 🔐 API 说明
 
 本项目使用以下公开 API:
