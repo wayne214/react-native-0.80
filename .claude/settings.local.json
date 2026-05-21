@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/anwenyang/.claude/skills/react-native/**)"
+    ]
+  }
+}

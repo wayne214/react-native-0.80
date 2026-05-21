@@ -50,6 +50,7 @@ import RegisterPage from "./src/pages/auth/RegisterPage";
 import ProfilePage from "./src/pages/auth/ProfilePage";
 import FavoritesPage from "./src/pages/auth/FavoritesPage";
 import HistoryPage from "./src/pages/auth/HistoryPage";
+import SettingsPage from "./src/pages/settings";
 import { RootState } from './src/store';
 
 const { appKey } = _updateConfig[Platform.OS as keyof typeof _updateConfig] || {};
@@ -173,6 +174,13 @@ const RootStack = createNativeStackNavigator({
       screen: HistoryPage,
       options: {
         title: '浏览历史',
+        headerShown: true,
+      }
+    },
+    Settings: {
+      screen: SettingsPage,
+      options: {
+        title: '设置',
         headerShown: true,
       }
     },
