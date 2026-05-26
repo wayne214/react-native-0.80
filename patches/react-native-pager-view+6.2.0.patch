@@ -1,0 +1,135 @@
+diff --git a/node_modules/react-native-pager-view/android/src/main/java/com/reactnativepagerview/NestedScrollableHost.kt b/node_modules/react-native-pager-view/android/src/main/java/com/reactnativepagerview/NestedScrollableHost.kt
+index 91d9946..eb9e109 100644
+--- a/node_modules/react-native-pager-view/android/src/main/java/com/reactnativepagerview/NestedScrollableHost.kt
++++ b/node_modules/react-native-pager-view/android/src/main/java/com/reactnativepagerview/NestedScrollableHost.kt
+@@ -5,6 +5,7 @@ import android.util.AttributeSet
+ import android.view.MotionEvent
+ import android.view.View
+ import android.view.ViewConfiguration
++import android.view.ViewGroup
+ import android.widget.FrameLayout
+ import androidx.viewpager2.widget.ViewPager2
+ import androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL
+@@ -12,12 +13,15 @@ import kotlin.math.absoluteValue
+ import kotlin.math.sign
+ 
+ /**
+- * Layout to wrap a scrollable component inside a ViewPager2. Provided as a solution to the problem
+- * where pages of ViewPager2 have nested scrollable elements that scroll in the same direction as
+- * ViewPager2. The scrollable element needs to be the immediate and only child of this host layout.
++ * Enhanced layout to wrap a scrollable component inside a ViewPager2.
+  *
+- * This solution has limitations when using multiple levels of nested scrollable elements
+- * (e.g. a horizontal RecyclerView in a vertical RecyclerView in a horizontal ViewPager2).
++ * Improvements over the stock version:
++ * - Recursively finds the actual scrollable child at the touch point, instead of
++ *   only checking getChildAt(0) (which is ViewPager2 itself).
++ * - Protects vertical child scrollables from ViewPager2's internal RecyclerView
++ *   intercepting vertical gestures prematurely.
++ * - Handles nested horizontal ScrollViews inside pages (e.g. Banner carousel):
++ *   only yields to ViewPager2 when the inner horizontal scroll is at its edge.
+  */
+ class NestedScrollableHost : FrameLayout {
+   constructor(context: Context) : super(context)
+@@ -42,8 +46,60 @@ class NestedScrollableHost : FrameLayout {
+     touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+   }
+ 
++  /**
++   * Recursively find the deepest scrollable child at the given coordinates.
++   * Walks the view tree top-down, checking hit-test and scrollability.
++   *
++   * @param root    the view subtree to search
++   * @param x       touch X in root's coordinate space
++   * @param y       touch Y in root's coordinate space
++   * @param orientation  0 = horizontal, 1 = vertical
++   * @return the first (deepest) view that can scroll in the given direction, or null
++   */
++  private fun findScrollableChildAt(
++    root: View,
++    x: Float,
++    y: Float,
++    orientation: Int
++  ): View? {
++    if (root !is ViewGroup) return null
++    for (i in root.childCount - 1 downTo 0) {
++      val child = root.getChildAt(i) ?: continue
++      if (!child.isShown) continue
++      // Transform coordinates into child's local space
++      val localX = x - (child.left - root.scrollX)
++      val localY = y - (child.top - root.scrollY)
++      if (localX < 0 || localX > child.width || localY < 0 || localY > child.height) continue
++      // Check if this child can scroll in the requested orientation (either direction)
++      val canScrollForward = when (orientation) {
++        0 -> child.canScrollHorizontally(1) || child.canScrollHorizontally(-1)
++        1 -> child.canScrollVertically(1) || child.canScrollVertically(-1)
++        else -> false
++      }
++      if (canScrollForward) return child
++      // Recurse into children
++      val found = findScrollableChildAt(child, localX, localY, orientation)
++      if (found != null) return found
++    }
++    return null
++  }
++
++  /**
++   * Check if there is a scrollable child at the initial touch point that can scroll
++   * in the given direction.
++   */
+   private fun canChildScroll(orientation: Int, delta: Float): Boolean {
+     val direction = -delta.sign.toInt()
++    // First try the recursive search from this host (which covers the ViewPager2 + page tree)
++    val scrollable = findScrollableChildAt(this, initialX, initialY, orientation)
++    if (scrollable != null) {
++      return when (orientation) {
++        0 -> scrollable.canScrollHorizontally(direction)
++        1 -> scrollable.canScrollVertically(direction)
++        else -> false
++      }
++    }
++    // Fallback to the original direct-child check
+     return when (orientation) {
+       0 -> child?.canScrollHorizontally(direction) ?: false
+       1 -> child?.canScrollVertically(direction) ?: false
+@@ -59,11 +115,6 @@ class NestedScrollableHost : FrameLayout {
+   private fun handleInterceptTouchEvent(e: MotionEvent) {
+     val orientation = parentViewPager?.orientation ?: return
+ 
+-    // Early return if child can't scroll in same direction as parent
+-    if (!canChildScroll(orientation, -1f) && !canChildScroll(orientation, 1f)) {
+-      return
+-    }
+-
+     if (e.action == MotionEvent.ACTION_DOWN) {
+       initialX = e.x
+       initialY = e.y
+@@ -79,15 +130,23 @@ class NestedScrollableHost : FrameLayout {
+ 
+       if (scaledDx > touchSlop || scaledDy > touchSlop) {
+         if (isVpHorizontal == (scaledDy > scaledDx)) {
+-          // Gesture is perpendicular, allow all parents to intercept
+-          parent.requestDisallowInterceptTouchEvent(false)
++          // Gesture is perpendicular to ViewPager2 orientation (vertical swipe in horizontal VP).
++          // Enhanced: check if a nested vertical scrollable at the touch point can still scroll.
++          // If yes, protect it from ViewPager2's internal RecyclerView intercepting.
++          val verticalDir = dy.sign.toInt()
++          val verticalScrollable = findScrollableChildAt(this, initialX, initialY, 1)
++          if (verticalScrollable != null && verticalScrollable.canScrollVertically(verticalDir)) {
++            parent.requestDisallowInterceptTouchEvent(true)
++          } else {
++            parent.requestDisallowInterceptTouchEvent(false)
++          }
+         } else {
+-          // Gesture is parallel, query child if movement in that direction is possible
++          // Gesture is parallel to ViewPager2 orientation (horizontal swipe in horizontal VP).
++          // Enhanced: recursively find horizontal scrollable at touch point (e.g. Banner ScrollView).
++          // Only yield to ViewPager2 when the inner horizontal scroll is at its edge.
+           if (canChildScroll(orientation, if (isVpHorizontal) dx else dy)) {
+-            // Child can scroll, disallow all parents to intercept
+             parent.requestDisallowInterceptTouchEvent(true)
+           } else {
+-            // Child cannot scroll, allow all parents to intercept
+             parent.requestDisallowInterceptTouchEvent(false)
+           }
+         }
