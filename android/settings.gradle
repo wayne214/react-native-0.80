@@ -1,18 +1,4 @@
-pluginManagement {
-    includeBuild("../node_modules/@react-native/gradle-plugin")
-    repositories {
-        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
-        maven { url "https://maven.aliyun.com/repository/google" }
-        maven { url "https://maven.aliyun.com/repository/public" }
-        maven { url "https://maven.aliyun.com/repository/central" }
-        maven { url "https://maven.aliyun.com/repository/jcenter" }
-        maven { url "https://repo.huaweicloud.com/repository/maven" }
-
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
+pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 plugins { id("com.facebook.react.settings") }
 extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
 rootProject.name = 'RNDemo80'
